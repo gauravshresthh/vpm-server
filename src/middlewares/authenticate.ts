@@ -19,9 +19,10 @@ export const authenticate = (roles: string[]) => {
       }
 
       // Attach user info to request if needed
-      (req as any).user = payload;
+      (req as Request).user = payload;
       next();
-    } catch (error) {
+    } catch (err : unknown) {
+      console.log(err)
       res.status(401).json({ message: 'Invalid token' });
     }
   };
