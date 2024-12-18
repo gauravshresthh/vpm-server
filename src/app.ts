@@ -4,7 +4,7 @@ import userRoutes from './routes/userRoutes';
 import roleRoutes from './routes/roleRoutes';
 import { connectDB } from './config/database';
 import swaggerUi from 'swagger-ui-express';
-import { swaggerDocs } from './config/swagger.js';
+import { swaggerDocs } from './config/swagger';
 const app = express();
 
 app.use(

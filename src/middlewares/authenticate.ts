@@ -21,8 +21,8 @@ export const authenticate = (roles: string[]) => {
       // Attach user info to request if needed
       (req as Request).user = payload;
       next();
-    } catch (err : unknown) {
-      console.log(err)
+    } catch (err: unknown) {
+      console.log(err);
       res.status(401).json({ message: 'Invalid token' });
     }
   };

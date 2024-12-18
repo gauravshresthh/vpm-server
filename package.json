@@ -8,7 +8,8 @@
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'",
     "prepare": "husky",
     "start": "node dist/server.js",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "nodemon --watch src --exec 'ts-node' src/server.ts"
   },
   "keywords": [],
   "author": "Gaurav Shrestha",
@@ -46,6 +47,7 @@
     "globals": "^15.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
+    "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.1"
