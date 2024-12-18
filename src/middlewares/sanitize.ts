@@ -10,7 +10,7 @@ const sanitize = (schema: Joi.ObjectSchema) => {
         message: error.details.map((d) => d.message),
       });
     }
-    next(); 
+    next();
   };
 };
 
