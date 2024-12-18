@@ -9,13 +9,16 @@
     "prepare": "husky",
     "start": "node dist/server.js",
     "build": "tsc",
-    "lint-staged": "eslint 'src/**/*.{ts,js}' --fix"
+    "lint-staged": "eslint 'src/**/*.{ts,js}' --fix",
+    "dev": "nodemon --watch src --exec 'ts-node' src/server.ts"
   },
   "keywords": [],
   "author": "Gaurav Shrestha",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.7",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.7",
@@ -30,7 +33,9 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
@@ -51,6 +56,7 @@
     "globals": "^15.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
+    "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.1"
