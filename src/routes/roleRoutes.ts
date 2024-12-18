@@ -16,7 +16,7 @@ router.get(
 router.get(
   '/vpo',
   passport.authenticate('jwt', { session: false }),
-  authorize(['VPO']),
+  authorize(['vpo']),
   (_req: Request, res: Response) => {
     res.send('VPO Access');
   }
@@ -25,7 +25,7 @@ router.get(
 router.get(
   '/system-admin',
   passport.authenticate('jwt', { session: false }),
-  authorize(['System admin']),
+  authorize(['system-admin']),
   (_req: Request, res: Response) => {
     res.send('System Admin Access');
   }
@@ -34,7 +34,7 @@ router.get(
 router.get(
   '/college-admin',
   passport.authenticate('jwt', { session: false }),
-  authorize(['college admin']),
+  authorize(['college-admin']),
   (_req: Request, res: Response) => {
     res.send('College Admin Access');
   }
