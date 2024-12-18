@@ -9,7 +9,7 @@
     "prepare": "husky",
     "start": "node dist/server.js",
     "build": "tsc",
-    "lint-staged": "eslint --fix"
+    "lint-staged": "eslint 'src/**/*.{ts,js}' --fix"
   },
   "keywords": [],
   "author": "Gaurav Shrestha",
