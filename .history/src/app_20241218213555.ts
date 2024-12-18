@@ -3,15 +3,8 @@ import bodyParser from 'body-parser';
 import userRoutes from './routes/userRoutes';
 import roleRoutes from './routes/roleRoutes';
 import { connectDB } from './config/database';
-import swaggerUi from 'swagger-ui-express';
-import { swaggerDocs } from './config/swagger.js';
-const app = express();
 
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocs, { explorer: true })
-);
+const app = express();
 
 app.use(bodyParser.json());
 
