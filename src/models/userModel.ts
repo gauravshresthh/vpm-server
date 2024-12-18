@@ -19,9 +19,10 @@ const UserSchema: Schema<IUser> = new Schema(
       required: true,
       enum: [
         'super-admin',
-        'VPO',
-        'System admin',
-        'college admin',
+        'system-admin',
+        'college-admin',
+        'vpo',
+        'vp-provider',
         'facilitator',
         'trainer',
         'student',
