@@ -13,10 +13,10 @@ app.use(bodyParser.json());
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/roles', roleRoutes);
 app.use(
-    '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerDocs, { explorer: true })
-  );
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocs, { explorer: true })
+);
 
 connectDB();
 
