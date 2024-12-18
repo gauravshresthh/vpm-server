@@ -6,6 +6,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import path from 'path';
 
 import userRoutes from './routes/userRoutes';
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV == 'development') {
 app.use(mongoSanitize());
 app.use(helmet());
 app.use(xss());
+app.use(cors());
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
