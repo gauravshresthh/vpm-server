@@ -195,7 +195,7 @@ const getMe = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const updateMe = catchAsync(async (req, res, next) => {
-  const user:any = req.user
+  const user: any = req.user;
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new CustomError(
@@ -205,20 +205,18 @@ const updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-
-  const filterObj = (obj: any, ...allowedFields: string[]): Record<string, any> => {
-    const newObj: Record<string, any> = {}; 
+  const filterObj = (
+    obj: any,
+    ...allowedFields: string[]
+  ): Record<string, any> => {
+    const newObj: Record<string, any> = {};
     Object.keys(obj).forEach((el) => {
       if (allowedFields.includes(el)) newObj[el] = obj[el];
     });
     return newObj;
   };
 
-  const filteredBody = filterObj(
-    req.body,
-    'name',
-    'photo',
-  );
+  const filteredBody = filterObj(req.body, 'name', 'photo');
 
   const result = await User.findByIdAndUpdate(user.id, filteredBody, {
     new: true,
@@ -235,7 +233,6 @@ const updateMe = catchAsync(async (req, res, next) => {
 
 const getUser = factory.getOne(User);
 
-
 export default {
   register,
   login,
@@ -243,5 +240,5 @@ export default {
   resendOtp,
   getMe,
   getUser,
-  updateMe
+  updateMe,
 };
