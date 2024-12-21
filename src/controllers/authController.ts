@@ -113,12 +113,10 @@ const verifyOtp = catchAsync(
     }
 
     if (user.otp_expiry < new Date()) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: 'OTP has expired. Please apply a new one.',
-        });
+      return res.status(400).json({
+        success: false,
+        message: 'OTP has expired. Please apply a new one.',
+      });
     }
 
     user.is_verified = true;
