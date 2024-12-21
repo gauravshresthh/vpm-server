@@ -31,10 +31,12 @@ VPM Server is a Node.js-based backend server developed using TypeScript and Expr
 3. Create a `.env` file in the root directory and configure the following:
    ```env
    PORT=3000
-   MONGO_URI=<your-mongodb-uri>
-   JWT_SECRET=<your-jwt-secret>
-   GOOGLE_CLIENT_ID=<your-google-client-id>
-   GOOGLE_CLIENT_SECRET=<your-google-client-secret>
+   DB_URI='mongodb://localhost:27017/vpm'
+   JWT_SECRET='random_file'
+   NODE_ENV='development'
+   NODEJS_GMAIL_APP_USER="gauravshresthh@gmail.com"
+   NODEJS_GMAIL_APP_PASSWORD="your email app password"
+   API_URL= "http://localhost:3000/api/v1/"
    ```
 
 ## Scripts

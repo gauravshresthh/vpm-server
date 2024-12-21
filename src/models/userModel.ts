@@ -7,6 +7,9 @@ export interface IUser extends Document {
   password: string;
   role: string;
   is_verified: boolean;
+  otp?: string;
+  otp_expiry?: Date;
+  last_otp_sent_at?: Date;
   comparePassword(password: string): Promise<boolean>;
 }
 
@@ -33,6 +36,9 @@ const UserSchema: Schema<IUser> = new Schema(
       type: Boolean,
       default: false,
     },
+    otp: { type: String, required: false },
+    otp_expiry: { type: Date, required: false },
+    last_otp_sent_at: { type: Date, required: false },
   },
   { timestamps: true }
 );

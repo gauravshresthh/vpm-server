@@ -10,7 +10,7 @@ import path from 'path';
 import passport from './config/passport';
 import session from 'express-session';
 
-import userRoutes from './routes/userRoutes';
+import authRoutes from './routes/authRoutes';
 import roleRoutes from './routes/roleRoutes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerDocs } from './config/swagger';
@@ -53,10 +53,13 @@ app.use('/api', limiter);
 app.use(bodyParser.json());
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello! Welcome to Vocational Placement Management API.');
+  res.json({
+    success: true,
+    message: "Hello! Welcome to Vocational Placement Management API."
+  });
 });
 
-app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/roles', roleRoutes);
 app.use(
   '/api-docs',

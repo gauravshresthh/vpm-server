@@ -1,12 +1,14 @@
 class CustomError extends Error {
-  statusCode?: number;
-  status: string;
+  statusCode: number;
+  success: boolean;
   isOperational: boolean;
-  constructor(message: string, statusCode?: number) {
+
+  constructor(message: string, statusCode: number = 400) {
     super(message);
 
-    this.statusCode = statusCode || undefined;
-    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+    // Directly use the default value of 400 if statusCode is not provided
+    this.statusCode = statusCode;
+    this.success = statusCode < 400;
     this.isOperational = true;
 
     Error.captureStackTrace(this, this.constructor);
