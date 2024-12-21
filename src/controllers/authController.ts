@@ -63,7 +63,8 @@ const login = catchAsync(async (req: Request, res: Response): Promise<void> => {
   if (!user.is_verified) {
     res.status(403).json({
       success: false,
-      message: 'Email not verified. Please verify your email before logging in.',
+      message:
+        'Email not verified. Please verify your email before logging in.',
     });
     return;
   }
@@ -102,7 +103,9 @@ const verifyOtp = catchAsync(
     const user: any = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'User not found.' });
     }
 
     if (user.otp !== otp) {
@@ -110,9 +113,14 @@ const verifyOtp = catchAsync(
     }
 
     if (user.otp_expiry < new Date()) {
-      return res.status(400).json({ success: false, message: 'OTP has expired. Please apply a new one.' });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: 'OTP has expired. Please apply a new one.',
+        });
     }
-    
+
     user.is_verified = true;
     user.otp = undefined;
     user.otp_expiry = undefined;
@@ -136,12 +144,17 @@ const resendOtp = catchAsync(
     }
 
     if (user.is_verified) {
-      res.status(400).json({ success: false, message: 'User is already verified.' });
+      res
+        .status(400)
+        .json({ success: false, message: 'User is already verified.' });
       return;
     }
 
     const now = new Date();
-    if (user.last_otp_sent_at && now.getTime() - user.last_otp_sent_at.getTime() < 60 * 1000) {
+    if (
+      user.last_otp_sent_at &&
+      now.getTime() - user.last_otp_sent_at.getTime() < 60 * 1000
+    ) {
       res.status(429).json({
         success: false,
         message: 'Please wait at least 1 minute before requesting a new OTP.',
@@ -154,7 +167,7 @@ const resendOtp = catchAsync(
 
     user.otp = newOtp;
     user.otp_expiry = newOtpExpiry;
-    user.last_otp_sent_at = now; 
+    user.last_otp_sent_at = now;
     await user.save();
 
     await sendEmail({
@@ -174,10 +187,9 @@ const resendOtp = catchAsync(
   }
 );
 
-
 export default {
   register,
   login,
   verifyOtp,
-  resendOtp
+  resendOtp,
 };

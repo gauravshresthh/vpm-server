@@ -18,10 +18,10 @@ export const EmailLayout = (headerContent: string, bodyContent: string) => `
 `;
 
 export const ResendRegistrationOtpEmail = (
-    registration_link: string,
-    otp: string
-  ) => {
-    const bodyContent = `
+  registration_link: string,
+  otp: string
+) => {
+  const bodyContent = `
       <p>Hi Student,</p>
       <br/>
       <p>
@@ -40,7 +40,6 @@ export const ResendRegistrationOtpEmail = (
       </p>
       </a>
     `;
-  
-    return EmailLayout('', bodyContent);
-  };
-  
+
+  return EmailLayout('', bodyContent);
+};

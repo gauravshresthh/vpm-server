@@ -159,7 +159,6 @@ router.post(
   authController.login
 );
 
-
 /**
  * @swagger
  * /api/v1/auth/verify-otp:
@@ -228,7 +227,6 @@ router.post(
   sanitize(verifyOtpValidationSchema),
   authController.verifyOtp
 );
-
 
 /**
  * @swagger

@@ -6,7 +6,7 @@ interface EmailOptions {
   email: string;
   subject: string;
   message: string;
-  htmlContent?: string
+  htmlContent?: string;
 }
 
 const validateEnvVars = () => {
@@ -44,7 +44,7 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
       to: options.email,
       subject: options.subject,
       text: options.message,
-      html: options.htmlContent
+      html: options.htmlContent,
     };
 
     await transporter.sendMail(mailOptions);
