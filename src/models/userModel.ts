@@ -2,16 +2,17 @@ import mongoose, { Schema, Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 export interface IUser extends Document {
-  username: string;
+  name: string;
   email: string;
   password: string;
   role: string;
+  is_verified: boolean,
   comparePassword(password: string): Promise<boolean>;
 }
 
 const UserSchema: Schema<IUser> = new Schema(
   {
-    username: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: {
@@ -27,6 +28,10 @@ const UserSchema: Schema<IUser> = new Schema(
         'trainer',
         'student',
       ],
+    },
+    is_verified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

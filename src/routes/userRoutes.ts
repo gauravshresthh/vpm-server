@@ -1,5 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'express';
 import userController from '../controllers/userController';
+import sanitize from '../middlewares/sanitize';
+import {
+  userLoginValidationSchema,
+  userRegisterValidationSchema,
+} from '../validations/userValidation';
 
 const router = Router();
 
@@ -28,7 +35,16 @@ const router = Router();
  *                     description: The user's name.
  *                     example: John Doe
  */
-router.post('/register', userController.register);
-router.post('/login', userController.login);
+router.post(
+  '/register',
+  sanitize(userRegisterValidationSchema),
+  userController.register
+);
+
+router.post(
+  '/login',
+  sanitize(userLoginValidationSchema),
+  userController.login
+);
 
 export default router;
