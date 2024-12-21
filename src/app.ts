@@ -15,6 +15,8 @@ import roleRoutes from './routes/roleRoutes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerDocs } from './config/swagger';
 import { config } from './config/config';
+import CustomError from './utils/CustomError';
+import globalErrorHandler from './utils/globalErrorHandler';
 
 const app = express();
 
@@ -51,8 +53,12 @@ app.use('/api', limiter);
 app.use(bodyParser.json());
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello! Welcome to Vocational Placement Management API.');
+  res.json({
+    success: true,
+    message: 'Hello! Welcome to Vocational Placement Management API.'
+  });
 });
+
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/roles', roleRoutes);
 app.use(
@@ -60,5 +66,13 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocs, { explorer: true })
 );
+
+app.all('*', (req, res, next) => {
+  return next(
+    new CustomError(`Cant find ${req.originalUrl} on this server.`, 404)
+  );
+});
+
+app.use(globalErrorHandler);
 
 export default app;

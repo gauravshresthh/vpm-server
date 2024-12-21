@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'express';
 import userController from '../controllers/userController';
 import sanitize from '../middlewares/sanitize';
@@ -38,6 +40,7 @@ router.post(
   sanitize(userRegisterValidationSchema),
   userController.register
 );
+
 router.post(
   '/login',
   sanitize(userLoginValidationSchema),

@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: string;
+  is_verified: boolean;
   comparePassword(password: string): Promise<boolean>;
 }
 
@@ -27,6 +28,10 @@ const UserSchema: Schema<IUser> = new Schema(
         'trainer',
         'student',
       ],
+    },
+    is_verified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

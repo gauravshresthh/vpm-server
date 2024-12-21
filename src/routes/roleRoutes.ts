@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express';
-import passport from 'passport';
 import { authorize } from '../middlewares/authorize';
+import { authenticate } from '../middlewares/authenticate';
 
 const router = Router();
 
 router.get(
   '/super-admin',
-  passport.authenticate('local', { session: false }),
+  authenticate,
   authorize(['super-admin']),
   (_req: Request, res: Response) => {
     res.send('Super Admin Access');
@@ -15,8 +15,8 @@ router.get(
 
 router.get(
   '/vpo',
-  // passport.authenticate('local', { session: false }),
-  // authorize(['vpo']),
+  authenticate,
+  authorize(['vpo', 'super-admin']),
   (_req: Request, res: Response) => {
     res.send('VPO Access');
   }
@@ -24,7 +24,7 @@ router.get(
 
 router.get(
   '/system-admin',
-  passport.authenticate('local', { session: false }),
+  authenticate,
   authorize(['system-admin']),
   (_req: Request, res: Response) => {
     res.send('System Admin Access');
@@ -33,7 +33,7 @@ router.get(
 
 router.get(
   '/college-admin',
-  passport.authenticate('local', { session: false }),
+  authenticate,
   authorize(['college-admin']),
   (_req: Request, res: Response) => {
     res.send('College Admin Access');
@@ -42,7 +42,7 @@ router.get(
 
 router.get(
   '/facilitator',
-  passport.authenticate('local', { session: false }),
+  authenticate,
   authorize(['facilitator']),
   (_req: Request, res: Response) => {
     res.send('Facilitator Access');
@@ -51,7 +51,7 @@ router.get(
 
 router.get(
   '/trainer',
-  passport.authenticate('local', { session: false }),
+  authenticate,
   authorize(['trainer']),
   (_req: Request, res: Response) => {
     res.send('Trainer Access');
@@ -60,7 +60,7 @@ router.get(
 
 router.get(
   '/student',
-  passport.authenticate('local', { session: false }),
+  authenticate,
   authorize(['student']),
   (_req: Request, res: Response) => {
     res.send('Student Access');

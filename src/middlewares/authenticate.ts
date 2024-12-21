@@ -1,29 +1,64 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import passport from 'passport';
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { config } from '../config/config';
 
-export const authenticate = (roles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    const token = req.headers.authorization?.split(' ')[1];
+// Define the info type for Passport authentication responses
+interface AuthInfo {
+  success: boolean;
+  message: string;
+  error?: string;
+}
 
-    if (!token) {
-      res.status(401).json({ message: 'Unauthorized' });
-      return;
-    }
-
-    try {
-      const payload = jwt.verify(token, config.jwtSecret) as { role: string };
-      if (!roles.includes(payload.role)) {
-        res.status(403).json({ message: 'Forbidden' });
-        return;
+// Authenticate local strategy
+export const authenticateLocal = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  passport.authenticate(
+    'local',
+    (err: Error | null, user: any, info: AuthInfo | undefined) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: 'An error occurred during authentication',
+          error: err.message,
+        });
       }
-
-      // Attach user info to request if needed
-      (req as Request).user = payload;
+      if (!user) {
+        return res.status(400).json(info);
+      }
+      req.user = user;
       next();
-    } catch (err: unknown) {
-      console.log(err);
-      res.status(401).json({ message: 'Invalid token' });
     }
-  };
+  )(req, res, next);
+};
+
+// Authenticate JWT strategy
+export const authenticate = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  passport.authenticate(
+    'jwt',
+    { session: false },
+    (err: Error | null, user: any, info: AuthInfo | undefined) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: 'An error occurred during authentication',
+          error: err.message,
+        });
+      }
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: err || info,
+        });
+      }
+      req.user = user;
+      next();
+    }
+  )(req, res, next);
 };
