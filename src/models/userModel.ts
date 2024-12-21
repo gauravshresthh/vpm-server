@@ -10,6 +10,7 @@ export interface IUser extends Document {
   otp?: string;
   otp_expiry?: Date;
   last_otp_sent_at?: Date;
+  active: boolean;
   comparePassword(password: string): Promise<boolean>;
 }
 
@@ -17,7 +18,7 @@ const UserSchema: Schema<IUser> = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: false },
     role: {
       type: String,
       required: true,
@@ -39,6 +40,11 @@ const UserSchema: Schema<IUser> = new Schema(
     otp: { type: String, required: false },
     otp_expiry: { type: Date, required: false },
     last_otp_sent_at: { type: Date, required: false },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
   { timestamps: true }
 );
@@ -48,6 +54,15 @@ UserSchema.pre<IUser>('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   next();
+});
+
+UserSchema.set('toObject', {
+  transform: function (doc, ret) {
+    delete ret.password;
+    delete ret.__v;
+    delete ret.is_verified;
+    return ret;
+  },
 });
 
 UserSchema.methods.comparePassword = function (

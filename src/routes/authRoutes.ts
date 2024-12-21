@@ -5,10 +5,12 @@ import authController from '../controllers/authController';
 import sanitize from '../middlewares/sanitize';
 import {
   resendOtpValidationSchema,
+  updateMeValidationSchema,
   userLoginValidationSchema,
   userRegisterValidationSchema,
   verifyOtpValidationSchema,
 } from '../validations/authValidation';
+import { authenticate } from '../middlewares/authenticate';
 
 const router = Router();
 
@@ -304,6 +306,20 @@ router.post(
   '/resend-otp',
   sanitize(resendOtpValidationSchema),
   authController.resendOtp
+);
+
+router.get(
+  '/get-me',
+  authenticate,
+  authController.getMe,
+  authController.getUser
+);
+
+router.put(
+  '/update-me',
+  sanitize(updateMeValidationSchema),
+  authenticate,
+  authController.updateMe
 );
 
 export default router;

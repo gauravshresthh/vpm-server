@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { User } from '../models/userModel';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
@@ -9,6 +10,8 @@ import sendEmail from '../utils/sendEmail';
 import { RegistrationEmail } from '../emails/RegistrationTemplates';
 import crypto from 'crypto';
 import { ResendRegistrationOtpEmail } from '../emails/ResendRegistrationOtpEmail';
+import factory from '../utils/handleFactory';
+import CustomError from '../utils/CustomError';
 
 const register = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
@@ -185,9 +188,60 @@ const resendOtp = catchAsync(
   }
 );
 
+const getMe = async (req: Request, res: Response, next: NextFunction) => {
+  const user: any = req.user;
+  req.params.id = user.id;
+  next();
+};
+
+const updateMe = catchAsync(async (req, res, next) => {
+  const user:any = req.user
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new CustomError(
+        'This route is not for password updates. Please use /updateMyPassword.',
+        400
+      )
+    );
+  }
+
+
+  const filterObj = (obj: any, ...allowedFields: string[]): Record<string, any> => {
+    const newObj: Record<string, any> = {}; 
+    Object.keys(obj).forEach((el) => {
+      if (allowedFields.includes(el)) newObj[el] = obj[el];
+    });
+    return newObj;
+  };
+
+  const filteredBody = filterObj(
+    req.body,
+    'name',
+    'photo',
+  );
+
+  const result = await User.findByIdAndUpdate(user.id, filteredBody, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {
+      user: result,
+    },
+  });
+});
+
+const getUser = factory.getOne(User);
+
+
 export default {
   register,
   login,
   verifyOtp,
   resendOtp,
+  getMe,
+  getUser,
+  updateMe
 };
