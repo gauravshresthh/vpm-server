@@ -6,7 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: string;
-  is_verified: boolean,
+  is_verified: boolean;
   comparePassword(password: string): Promise<boolean>;
 }
 

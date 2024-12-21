@@ -5,12 +5,10 @@ export const authorize = (roles: string[]) => {
     const user = req.user as { role: string };
 
     if (!user || !roles.includes(user.role)) {
-      res
-        .status(403)
-        .json({
-          success: false,
-          message: `Forbidden: You do not have access.`,
-        });
+      res.status(403).json({
+        success: false,
+        message: `Forbidden: You do not have access.`,
+      });
       return;
     }
 
