@@ -17,7 +17,7 @@ export const EmailLayout = (headerContent: string, bodyContent: string) => `
   </div>
 `;
 
-export const ResendRegistrationOtpEmail = (
+export const ResendRegistrationOtpEmailTemplate = (
   registration_link: string,
   otp: string
 ) => {

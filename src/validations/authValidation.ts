@@ -21,8 +21,8 @@ const resendOtpValidationSchema = Joi.object({
 }).options({ allowUnknown: false });
 
 const updateMeValidationSchema = Joi.object({
-  email: Joi.string().email().optional(),
   name: Joi.string().optional(),
+  photo: Joi.string().optional(),
 }).options({ allowUnknown: false });
 
 export {

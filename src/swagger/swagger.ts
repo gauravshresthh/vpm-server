@@ -19,6 +19,7 @@ schemaFiles.forEach((file) => {
   }
 });
 
+
 export const swaggerOptions: swaggerJSDoc.Options = {
   definition: {
     openapi: '3.0.0',
@@ -56,13 +57,14 @@ export const swaggerOptions: swaggerJSDoc.Options = {
         },
       },
     },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
+    // security: [
+    //   {
+    //     bearerAuth: [],
+    //   },
+    // ],
   },
-  apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
+  // apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
+  apis: ['./src/swagger/paths/*/*.yaml'],
 };
 
 export const swaggerDocs = swaggerJSDoc(swaggerOptions);

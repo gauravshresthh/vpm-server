@@ -39,7 +39,7 @@ export const authenticate = (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): any => {
   passport.authenticate(
     'jwt',
     { session: false },

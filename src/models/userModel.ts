@@ -1,4 +1,5 @@
-import mongoose, { Schema, Document } from 'mongoose';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose, { Schema, Document, Query } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 export interface IUser extends Document {
@@ -6,11 +7,11 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: string;
-  is_verified: boolean;
+  is_verified?: boolean;
   otp?: string;
   otp_expiry?: Date;
   last_otp_sent_at?: Date;
-  active: boolean;
+  active?: boolean;
   comparePassword(password: string): Promise<boolean>;
 }
 
@@ -49,6 +50,12 @@ const UserSchema: Schema<IUser> = new Schema(
   { timestamps: true }
 );
 
+UserSchema.pre<Query<any, IUser>>(/^find/, function (next) {
+  this.find({ active: true }); // Automatically exclude inactive users
+  next();
+});
+
+
 UserSchema.pre<IUser>('save', async function (next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
@@ -70,5 +77,7 @@ UserSchema.methods.comparePassword = function (
 ): Promise<boolean> {
   return bcrypt.compare(password, this.password);
 };
+
+UserSchema.index({ role: 1, active: 1 });
 
 export const User = mongoose.model<IUser>('User', UserSchema);

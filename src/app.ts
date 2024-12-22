@@ -12,11 +12,13 @@ import session from 'express-session';
 
 import authRoutes from './routes/authRoutes';
 import roleRoutes from './routes/roleRoutes';
+import superAdminRoutes from './routes/superAdminRoutes';
 import swaggerUi from 'swagger-ui-express';
-import { swaggerDocs } from './config/swagger';
+
 import { config } from './config/config';
 import CustomError from './utils/CustomError';
 import globalErrorHandler from './utils/globalErrorHandler';
+import { swaggerDocs } from './swagger/swagger';
 
 const app = express();
 
@@ -61,6 +63,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/roles', roleRoutes);
+app.use('/api/v1/super-admin', superAdminRoutes);
 app.use(
   '/api-docs',
   swaggerUi.serve,

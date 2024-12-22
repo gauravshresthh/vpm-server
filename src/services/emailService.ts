@@ -55,4 +55,8 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
   }
 };
 
-export default sendEmail;
+const emailService = {
+  sendEmail
+}
+
+export default emailService;

@@ -1,0 +1,62 @@
+/api/v1/auth/verify-otp:
+   post:
+     summary: Verify user using OTP
+     description: Verifies the user by validating the OTP sent to their email.
+     tags:
+        - Auth
+     requestBody:
+       required: true
+       content:
+         application/json:
+           schema:
+             type: object
+             properties:
+               email:
+                 type: string
+                 example: 'user@example.com'
+               otp:
+                 type: string
+                 example: '123456'
+             required:
+               - email
+               - otp
+     responses:
+       200:
+         description: User successfully verified
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 success:
+                   type: boolean
+                   example: true
+                 message:
+                   type: string
+                   example: 'User verified successfully'
+       400:
+         description: Invalid OTP or OTP has expired
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 success:
+                   type: boolean
+                   example: false
+                 message:
+                   type: string
+                   example: 'Invalid OTP'
+       404:
+         description: User not found
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 success:
+                   type: boolean
+                   example: false
+                 message:
+                   type: string
+                   example: 'User not found'
