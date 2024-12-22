@@ -1,0 +1,101 @@
+/api/v1/auth/update-me:
+  put:
+    summary: Update authenticated user's details
+    description: Updates the authenticated user's non-password details, such as `name` or `photo`. This route does not handle password updates.
+    tags:
+      - Profile
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Gaurav Shrestha
+              photo:
+                type: string
+                example: 'https://example.com/user-photo.jpg'
+            additionalProperties: false
+    responses:
+      '200':
+        description: Successfully updated user details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: '676738fa2d09b5c5a19c1798'
+                        name:
+                          type: string
+                          example: Gaurav Shrestha
+                        photo:
+                          type: string
+                          example: 'https://example.com/user-photo.jpg'
+                        email:
+                          type: string
+                          example: gauravshrestha@mailinator.com
+                        role:
+                          type: string
+                          example: student
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: '2024-12-21T21:54:02.351Z'
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: '2024-12-22T17:02:50.891Z'
+      '400':
+        description: Bad request - Invalid update attempt
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: 'This route is not for password updates. Please use /updateMyPassword.'
+      '401':
+        description: Unauthorized - Missing or invalid token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Unauthorized access - invalid token
+      '404':
+        description: User not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: No user found with that ID

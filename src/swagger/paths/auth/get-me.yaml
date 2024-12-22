@@ -1,0 +1,68 @@
+/api/v1/auth/get-me:
+    get:
+      summary: Get authenticated user's details
+      description: Fetches details of the authenticated user based on the provided JWT.
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved user details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: 676738fa2d09b5c5a19c1798
+                      name:
+                        type: string
+                        example: Gaurav Shrestha
+                      email:
+                        type: string
+                        example: gauravshrestha@mailinator.com
+                      role:
+                        type: string
+                        example: student
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2024-12-21T21:54:02.351Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2024-12-22T17:02:50.891Z
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Unauthorized access - invalid token
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: No document found with that ID

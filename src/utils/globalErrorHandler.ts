@@ -12,7 +12,7 @@ const handleDuplicateFieldsDB = (err: any): CustomError => {
   const match = err.errmsg?.match(/(["'])(\\?.)*?\1/);
   const value = match ? match[0] : 'unknown value';
 
-  const message = `Duplicate field value: ${value}. Please try using another value!`;
+  const message = `${value} already exists. Please try another value`;
   return new CustomError(message, 400);
 };
 

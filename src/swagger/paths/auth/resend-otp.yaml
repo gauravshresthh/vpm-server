@@ -1,0 +1,71 @@
+/api/v1/auth/resend-otp:
+    post:
+      summary: Resend OTP to user's email
+      description: Sends a new OTP to the user's email if they are not yet verified.
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'user@example.com'
+              required:
+                - email
+      responses:
+        '200':
+          description: A new OTP has been sent to the user's email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'A new OTP has been sent to your email'
+        '400':
+          description: User already verified or OTP resend limit reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'User is already verified'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'User not found'
+        '429':
+          description: Too many OTP requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Please wait at least 1 minute before requesting a new OTP'

@@ -17,7 +17,10 @@ export const EmailLayout = (headerContent: string, bodyContent: string) => `
   </div>
 `;
 
-export const RegistrationEmail = (registration_link: string, otp: string) => {
+export const RegistrationEmailTemplate = (
+  registration_link: string,
+  otp: string
+) => {
   const bodyContent = `
       <p>Hi Student,</p>
       <br/>

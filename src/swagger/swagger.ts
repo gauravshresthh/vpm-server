@@ -56,13 +56,14 @@ export const swaggerOptions: swaggerJSDoc.Options = {
         },
       },
     },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
+    // security: [
+    //   {
+    //     bearerAuth: [],
+    //   },
+    // ],
   },
-  apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
+  // apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
+  apis: ['./src/swagger/paths/*/*.yaml'],
 };
 
 export const swaggerDocs = swaggerJSDoc(swaggerOptions);
