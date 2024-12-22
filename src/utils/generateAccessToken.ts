@@ -1,4 +1,4 @@
-import { config } from "../config/config";
+import { config } from '../config/config';
 import jwt from 'jsonwebtoken';
 
 const generateAccessToken = (userId: string, role: string): string => {

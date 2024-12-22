@@ -19,7 +19,6 @@ schemaFiles.forEach((file) => {
   }
 });
 
-
 export const swaggerOptions: swaggerJSDoc.Options = {
   definition: {
     openapi: '3.0.0',

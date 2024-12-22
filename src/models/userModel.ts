@@ -55,7 +55,6 @@ UserSchema.pre<Query<any, IUser>>(/^find/, function (next) {
   next();
 });
 
-
 UserSchema.pre<IUser>('save', async function (next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);

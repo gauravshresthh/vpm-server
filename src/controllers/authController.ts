@@ -53,12 +53,12 @@ const login = catchAsync(
     }
 
     const isMatch = await user.comparePassword(password);
-    
+
     if (!isMatch) {
       return next(new CustomError('Invalid credentials', 401));
     }
 
-    const token = generateAccessToken(user._id, user.role)
+    const token = generateAccessToken(user._id, user.role);
 
     const result = {
       id: user._id,

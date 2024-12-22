@@ -56,7 +56,7 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
 };
 
 const emailService = {
-  sendEmail
-}
+  sendEmail,
+};
 
 export default emailService;

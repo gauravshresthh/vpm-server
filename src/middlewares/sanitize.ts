@@ -6,7 +6,7 @@ const sanitize = (schema: Joi.ObjectSchema) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.validateAsync(req.body);
-      next(); 
+      next();
     } catch (error: any) {
       res.status(400).json({
         success: false,

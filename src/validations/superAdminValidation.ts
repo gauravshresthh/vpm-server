@@ -28,7 +28,8 @@ const createUserValidationSchema = Joi.object({
     .messages({
       'string.base': 'Role must be a string',
       'any.required': 'Role is required',
-      'any.only': 'Role must be one of the following: system-admin, college-admin, vpo, vp-provider, facilitator, trainer, student',
+      'any.only':
+        'Role must be one of the following: system-admin, college-admin, vpo, vp-provider, facilitator, trainer, student',
     }),
 }).options({ allowUnknown: false });
 
