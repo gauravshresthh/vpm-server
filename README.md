@@ -32,7 +32,7 @@ VPM Server is a Node.js-based backend server developed using TypeScript and Expr
    ```env
    PORT=3000
    DB_URI='mongodb://localhost:27017/vpm'
-   JWT_SECRET='random_file'
+   JWT_SECRET='random_jwt_secret_with_symbols$'
    NODE_ENV='development'
    NODEJS_GMAIL_APP_USER="gauravshresthh@gmail.com"
    NODEJS_GMAIL_APP_PASSWORD="your email app password"
@@ -73,11 +73,19 @@ VPM Server is a Node.js-based backend server developed using TypeScript and Expr
 ## Folder Structure
 ```
 ├── src
+│   ├── config        # Server Configs
 │   ├── controllers   # Request handlers
-│   ├── middleware    # Custom middleware functions
+│   ├── dbAccess      # db Repository handlers (Db Layer)
+│   ├── emails        # Email Templates
+│   ├── middlewares   # Custom middleware functions
 │   ├── models        # Mongoose schemas
 │   ├── routes        # API route definitions
+│   ├── services      # Service Layer
+│   ├── swagger       # Swagger for API documentation
+│   ├── types         # Re-usable Type definitions
 │   ├── utils         # Helper functions
+│   ├── validations   # Joi validation Schemas
+│   └── app.ts        # App Start point
 │   └── server.ts     # Entry point
 ├── dist              # Compiled output
 ├── .env              # Environment variables
