@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'express';
 import authController from '../controllers/authController';
 import sanitize from '../middlewares/sanitize';
