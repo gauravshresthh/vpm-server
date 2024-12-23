@@ -1,28 +1,60 @@
 import Joi from 'joi';
 
 const userLoginValidationSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
+  email: Joi.string().email().required().messages({
+    'string.base': 'Email must be a string',
+    'string.email': 'Invalid email format',
+    'any.required': 'Email is required',
+  }),
+  password: Joi.string().required().messages({
+    'string.base': 'Password must be a string',
+    'any.required': 'Password is required',
+  }),
 }).options({ allowUnknown: false });
 
 const userRegisterValidationSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
+  name: Joi.string().required().messages({
+    'string.base': 'Name must be a string',
+    'any.required': 'Name is required',
+  }),
+  email: Joi.string().email().required().messages({
+    'string.base': 'Email must be a string',
+    'string.email': 'Invalid email format',
+    'any.required': 'Email is required',
+  }),
+  password: Joi.string().required().messages({
+    'string.base': 'Password must be a string',
+    'any.required': 'Password is required',
+  }),
 }).options({ allowUnknown: false });
 
 const verifyOtpValidationSchema = Joi.object({
-  email: Joi.string().email().required(),
-  otp: Joi.string().required(),
+  email: Joi.string().email().required().messages({
+    'string.base': 'Email must be a string',
+    'string.email': 'Invalid email format',
+    'any.required': 'Email is required',
+  }),
+  otp: Joi.string().required().messages({
+    'string.base': 'OTP must be a string',
+    'any.required': 'OTP is required',
+  }),
 }).options({ allowUnknown: false });
 
 const resendOtpValidationSchema = Joi.object({
-  email: Joi.string().email().required(),
+  email: Joi.string().email().required().messages({
+    'string.base': 'Email must be a string',
+    'string.email': 'Invalid email format',
+    'any.required': 'Email is required',
+  }),
 }).options({ allowUnknown: false });
 
 const updateMeValidationSchema = Joi.object({
-  name: Joi.string().optional(),
-  photo: Joi.string().optional(),
+  name: Joi.string().optional().messages({
+    'string.base': 'Name must be a string',
+  }),
+  photo: Joi.string().optional().messages({
+    'string.base': 'Photo must be a string',
+  }),
 }).options({ allowUnknown: false });
 
 export {
