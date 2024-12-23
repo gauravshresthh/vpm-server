@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import passport from 'passport';
 import { Request, Response, NextFunction } from 'express';
+import CustomError from '../utils/CustomError';
 
 // Define the info type for Passport authentication responses
 interface AuthInfo {
@@ -19,14 +21,12 @@ export const authenticateLocal = (
     'local',
     (err: Error | null, user: any, info: AuthInfo | undefined) => {
       if (err) {
-        return res.status(500).json({
-          success: false,
-          message: 'An error occurred during authentication',
-          error: err.message,
-        });
+        return next(
+          new CustomError('An error occurred during authentication.', 500)
+        );
       }
       if (!user) {
-        return res.status(400).json(info);
+        return next(new CustomError(err || 'You are unauthorized.', 403));
       }
       req.user = user;
       next();
@@ -45,17 +45,12 @@ export const authenticate = (
     { session: false },
     (err: Error | null, user: any, info: AuthInfo | undefined) => {
       if (err) {
-        return res.status(500).json({
-          success: false,
-          message: 'An error occurred during authentication',
-          error: err.message,
-        });
+        return next(
+          new CustomError('An error occurred during authentication.', 500)
+        );
       }
       if (!user) {
-        return res.status(401).json({
-          success: false,
-          message: err || info,
-        });
+        return next(new CustomError(err || 'You are unauthorized.', 403));
       }
       req.user = user;
       next();

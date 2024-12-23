@@ -6,7 +6,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: string;
+  role: mongoose.Types.ObjectId;
   is_verified?: boolean;
   otp?: string;
   otp_expiry?: Date;
@@ -20,20 +20,7 @@ const UserSchema: Schema<IUser> = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: {
-      type: String,
-      required: true,
-      enum: [
-        'super-admin',
-        'system-admin',
-        'college-admin',
-        'vpo',
-        'vp-provider',
-        'facilitator',
-        'trainer',
-        'student',
-      ],
-    },
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
     is_verified: {
       type: Boolean,
       default: false,

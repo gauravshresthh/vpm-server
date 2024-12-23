@@ -10,7 +10,8 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "lint-staged": "eslint 'src/**/*.{ts,js}' --fix",
-    "dev": "nodemon --watch src --exec 'ts-node' src/server.ts"
+    "dev": "nodemon --watch src --exec 'ts-node' src/server.ts",
+    "seed": "npx ts-node src/seeders/roleSeeder.ts"
   },
   "keywords": [],
   "author": "Gaurav Shrestha",

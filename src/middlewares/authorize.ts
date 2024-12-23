@@ -1,17 +1,35 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response, NextFunction } from 'express';
+import CustomError from '../utils/CustomError';
+import { User } from '../models/userModel';
 
 export const authorize = (roles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    const user = req.user as { role: string };
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userFromRequest = req.user as { id: string } | undefined;
 
-    if (!user || !roles.includes(user.role)) {
-      res.status(403).json({
-        success: false,
-        message: `Forbidden: You do not have access.`,
-      });
-      return;
+      if (!userFromRequest) {
+        return next(new CustomError('User is not authenticated', 401));
+      }
+      const user: any = await User.findById(userFromRequest.id).populate(
+        'role'
+      );
+
+      if (!user) {
+        return next(new CustomError('User not found', 404));
+      }
+      if (!user || !roles.includes(user.role.name)) {
+        return next(new CustomError(`Forbidden: You do not have access.`, 405));
+      }
+
+      next();
+    } catch (error) {
+      console.log(error);
+      return next(new CustomError('Authorization Failed', 500));
     }
-
-    next();
   };
 };
