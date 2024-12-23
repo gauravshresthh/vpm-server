@@ -79,26 +79,22 @@ const login = catchAsync(
 );
 
 const verifyOtp = catchAsync(
-  async (req: Request, res: Response): Promise<any> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { email, otp } = req.body;
 
-    const user: any = await User.findOne({ email });
-
+    const user: any = await userService.findUserByEmail(email);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: 'User not found.' });
+      return next(new CustomError('User not found.', 401));
     }
 
     if (user.otp !== otp) {
-      return res.status(400).json({ success: false, message: 'Invalid OTP.' });
+      return next(new CustomError('Invalid OTP.', 400));
     }
 
     if (user.otp_expiry < new Date()) {
-      return res.status(400).json({
-        success: false,
-        message: 'OTP has expired. Please apply a new one.',
-      });
+      return next(
+        new CustomError('OTP has expired. Please apply a new one.', 400)
+      );
     }
 
     user.is_verified = true;
@@ -113,21 +109,16 @@ const verifyOtp = catchAsync(
 );
 
 const resendOtp = catchAsync(
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { email } = req.body;
 
-    const user = await User.findOne({ email });
-
+    const user: any = await userService.findUserByEmail(email);
     if (!user) {
-      res.status(404).json({ success: false, message: 'User not found.' });
-      return;
+      return next(new CustomError('User not found.', 401));
     }
 
     if (user.is_verified) {
-      res
-        .status(400)
-        .json({ success: false, message: 'User is already verified.' });
-      return;
+      return next(new CustomError('User is already verified.', 400));
     }
 
     const now = new Date();
@@ -135,11 +126,12 @@ const resendOtp = catchAsync(
       user.last_otp_sent_at &&
       now.getTime() - user.last_otp_sent_at.getTime() < 60 * 1000
     ) {
-      res.status(429).json({
-        success: false,
-        message: 'Please wait at least 1 minute before requesting a new OTP.',
-      });
-      return;
+      return next(
+        new CustomError(
+          'Please wait at least 1 minute before requesting a new OTP.',
+          429
+        )
+      );
     }
 
     const newOtp = crypto.randomInt(100000, 999999).toString();
@@ -150,7 +142,7 @@ const resendOtp = catchAsync(
     user.last_otp_sent_at = now;
     await user.save();
 
-    await emailService.sendEmail({
+    const emailPayload = {
       email,
       subject: 'Vocational Placement Management - OTP Resend',
       message: `Your new OTP is ${newOtp}. It is valid for 10 minutes.`,
@@ -158,7 +150,9 @@ const resendOtp = catchAsync(
         `${process.env.API_URL}/registration/${email}`,
         newOtp
       ),
-    });
+    };
+
+    await emailService.sendEmail(emailPayload);
 
     res.status(200).json({
       success: true,
