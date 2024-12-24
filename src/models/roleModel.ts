@@ -11,7 +11,16 @@ const RoleSchema: Schema<IRole> = new Schema(
     permissions: {
       type: Map,
       of: [String],
-      default: {},
+      validate: {
+        validator: (value: Map<string, string[]>) => {
+          const allowedPermissions = ['all', 'read', 'write', 'create', 'delete'];
+          return Array.from(value.values()).every((actions) =>
+            actions.every((action) => allowedPermissions.includes(action))
+          );
+        },
+        message:
+          'Permissions must only include one of ["all", "read", "write", "create", "delete"].',
+      },
     },
   },
   { timestamps: true }
