@@ -13,7 +13,13 @@ const RoleSchema: Schema<IRole> = new Schema(
       of: [String],
       validate: {
         validator: (value: Map<string, string[]>) => {
-          const allowedPermissions = ['all', 'read', 'write', 'create', 'delete'];
+          const allowedPermissions = [
+            'all',
+            'read',
+            'write',
+            'create',
+            'delete',
+          ];
           return Array.from(value.values()).every((actions) =>
             actions.every((action) => allowedPermissions.includes(action))
           );
