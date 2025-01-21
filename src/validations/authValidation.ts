@@ -22,10 +22,19 @@ const userRegisterValidationSchema = Joi.object({
     'string.email': 'Invalid email format',
     'any.required': 'Email is required',
   }),
-  password: Joi.string().required().messages({
-    'string.base': 'Password must be a string',
-    'any.required': 'Password is required',
-  }),
+  password: Joi.string()
+    .pattern(
+      new RegExp(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/
+      )
+    )
+    .required()
+    .messages({
+      'string.base': 'Password must be a string',
+      'string.pattern.base':
+        'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character',
+      'any.required': 'Password is required',
+    }),
 }).options({ allowUnknown: false });
 
 const verifyOtpValidationSchema = Joi.object({

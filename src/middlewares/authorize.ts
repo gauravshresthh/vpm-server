@@ -18,12 +18,11 @@ export const authorize = (roles: string[]) => {
       const user: any = await User.findById(userFromRequest.id).populate(
         'role'
       );
-
       if (!user) {
         return next(new CustomError('User not found', 404));
       }
       if (!user || !roles.includes(user.role.name)) {
-        return next(new CustomError(`Forbidden: You do not have access.`, 405));
+        return next(new CustomError(`Forbidden: You do not have access.`, 401));
       }
 
       next();

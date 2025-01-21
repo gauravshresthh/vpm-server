@@ -9,6 +9,7 @@ import factory from '../utils/handleFactory';
 import CustomError from '../utils/CustomError';
 import emailService from '../services/emailService';
 import generateAccessToken from '../utils/generateAccessToken';
+import mongoose from 'mongoose';
 
 const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -37,6 +38,8 @@ const register = catchAsync(
 const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { email, password } = req.body;
+    const userAgent = req.headers['user-agent'] || '';
+    const ip = req.ip || '';
 
     const user: any = await userService.findUserByEmail(email);
     if (!user) {
@@ -63,9 +66,11 @@ const login = catchAsync(
     const result = {
       id: user._id,
       email: user.email,
-      role: user.role,
+      role: user.role.name,
       name: user.name,
     };
+
+    await trackLoginDetails(user._id, ip, userAgent);
 
     res.status(200).json({
       success: true,
@@ -205,6 +210,22 @@ const updateMe = catchAsync(async (req, res, next) => {
 });
 
 const getUser = factory.getOne(User);
+
+const trackLoginDetails = async (
+  userId: mongoose.Types.ObjectId,
+  ip: string,
+  userAgent: string
+) => {
+  await User.findByIdAndUpdate(
+    userId,
+    {
+      login_at: new Date(),
+      ip_address: ip,
+      user_agent: userAgent,
+    },
+    { new: true }
+  );
+};
 
 export default {
   register,
