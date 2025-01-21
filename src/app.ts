@@ -13,7 +13,7 @@ import session from 'express-session';
 import authRoutes from './routes/authRoutes';
 import roleRoutes from './routes/roleRoutes';
 import superAdminRoutes from './routes/superAdminRoutes';
-import providerRoutes from './routes/providerRoutes'
+import providerRoutes from './routes/providerRoutes';
 import swaggerUi from 'swagger-ui-express';
 
 import { config } from './config/config';

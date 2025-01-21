@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { IProvider, Provider } from "../models/providerModel";
+import mongoose from 'mongoose';
+import { IProvider, Provider } from '../models/providerModel';
 
 // Create a new provider
 const createProvider = async (payload: IProvider) => {
@@ -8,7 +8,9 @@ const createProvider = async (payload: IProvider) => {
 };
 
 // Find a provider by ID
-const findProviderById = async (providerId: mongoose.Types.ObjectId | string) => {
+const findProviderById = async (
+  providerId: mongoose.Types.ObjectId | string
+) => {
   return await Provider.findById(providerId);
 };
 
@@ -31,7 +33,10 @@ const deleteProvider = async (providerId: string) => {
 };
 
 // Add a campus to a provider
-const addCampus = async (providerId: string, campus: IProvider['campuses'][0]) => {
+const addCampus = async (
+  providerId: string,
+  campus: IProvider['campuses'][0]
+) => {
   return await Provider.findByIdAndUpdate(
     providerId,
     { $push: { campuses: campus } },

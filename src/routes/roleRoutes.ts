@@ -5,6 +5,15 @@ import { authenticate } from '../middlewares/authenticate';
 const router = Router();
 
 router.get(
+  '/',
+  authenticate,
+  authorize(['super-admin']),
+  (_req: Request, res: Response) => {
+    res.send('Super Admin Access');
+  }
+);
+
+router.get(
   '/super-admin',
   authenticate,
   authorize(['super-admin']),

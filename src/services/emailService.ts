@@ -14,7 +14,10 @@ const validateEnvVars = () => {
   const requiredVars = ['NODEJS_GMAIL_APP_USER', 'NODEJS_GMAIL_APP_PASSWORD'];
   requiredVars.forEach((variable) => {
     if (!process.env[variable]) {
-      throw new CustomError(`Environment variable ${variable} is not set.`, 400);
+      throw new CustomError(
+        `Environment variable ${variable} is not set.`,
+        400
+      );
     }
   });
 };

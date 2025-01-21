@@ -22,10 +22,7 @@ const findAll = async () => {
 };
 
 // Service to update provider details
-const updateById = async (
-  providerId: string,
-  payload: Partial<IProvider>
-) => {
+const updateById = async (providerId: string, payload: Partial<IProvider>) => {
   const updatedProvider = await providerRepository.updateProvider(
     providerId,
     payload

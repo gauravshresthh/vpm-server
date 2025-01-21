@@ -15,7 +15,6 @@ const create = catchAsync(async (req: Request, res: Response) => {
 });
 
 const findAll = catchAsync(async (req: Request, res: Response) => {
-
   const result = await providerService.findAll();
 
   res.status(201).json({
@@ -27,5 +26,5 @@ const findAll = catchAsync(async (req: Request, res: Response) => {
 
 export default {
   create,
-  findAll
+  findAll,
 };
