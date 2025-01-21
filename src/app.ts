@@ -13,6 +13,7 @@ import session from 'express-session';
 import authRoutes from './routes/authRoutes';
 import roleRoutes from './routes/roleRoutes';
 import superAdminRoutes from './routes/superAdminRoutes';
+import providerRoutes from './routes/providerRoutes'
 import swaggerUi from 'swagger-ui-express';
 
 import { config } from './config/config';
@@ -29,6 +30,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 if (process.env.NODE_ENV == 'development') {
   app.use(morgan('dev'));
+  app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocs, { explorer: true })
+  );
 }
 
 app.use(mongoSanitize());
@@ -64,11 +70,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/roles', roleRoutes);
 app.use('/api/v1/super-admin', superAdminRoutes);
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocs, { explorer: true })
-);
+app.use('/api/v1/providers', providerRoutes);
 
 app.all('*', (req, res, next) => {
   return next(

@@ -3,7 +3,7 @@
      summary: Verify user using OTP
      description: Verifies the user by validating the OTP sent to their email.
      tags:
-        - Auth
+        - Auth (Public)
      requestBody:
        required: true
        content:

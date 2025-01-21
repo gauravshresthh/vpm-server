@@ -15,35 +15,36 @@ export interface IUser extends Document {
   user_agent?: string;
   login_at?: Date;
   photo?: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
   comparePassword(password: string): Promise<boolean>;
 }
 
-const UserSchema: Schema<IUser> = new Schema({
-  name: { type: String, required: true, maxlength: 255 },
-  email: { type: String, required: true, unique: true, maxlength: 255 },
-  password: { type: String, required: true, maxlength: 255 },
-  role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
-  is_verified: {
-    type: Boolean,
-    default: false,
+const UserSchema: Schema<IUser> = new Schema(
+  {
+    name: { type: String, required: true, maxlength: 255 },
+    email: { type: String, required: true, unique: true, maxlength: 255 },
+    password: { type: String, required: true, maxlength: 255 },
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
+    is_verified: {
+      type: Boolean,
+      default: false,
+    },
+    otp: { type: String, required: false },
+    otp_expiry: { type: Date, required: false },
+    last_otp_sent_at: { type: Date, required: false },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
+    ip_address: { type: String, maxlength: 255 },
+    user_agent: { type: String, maxlength: 255 },
+    login_at: { type: Date },
+    photo: { type: String, maxlength: 255 },
   },
-  otp: { type: String, required: false },
-  otp_expiry: { type: Date, required: false },
-  last_otp_sent_at: { type: Date, required: false },
-  active: {
-    type: Boolean,
-    default: true,
-    select: false,
-  },
-  ip_address: { type: String, maxlength: 255 },
-  user_agent: { type: String, maxlength: 255 },
-  login_at: { type: Date },
-  photo: { type: String, maxlength: 255 },
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now },
-});
+  { timestamps: true }
+);
 
 UserSchema.pre<Query<any, IUser>>(/^find/, function (next) {
   this.find({ active: true });

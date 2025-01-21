@@ -1,6 +1,7 @@
 import nodemailer, { Transporter } from 'nodemailer';
 import { SendMailOptions } from 'nodemailer';
 import { config } from '../config/config';
+import CustomError from '../utils/CustomError';
 
 interface EmailOptions {
   email: string;
@@ -13,7 +14,7 @@ const validateEnvVars = () => {
   const requiredVars = ['NODEJS_GMAIL_APP_USER', 'NODEJS_GMAIL_APP_PASSWORD'];
   requiredVars.forEach((variable) => {
     if (!process.env[variable]) {
-      throw new Error(`Environment variable ${variable} is not set.`);
+      throw new CustomError(`Environment variable ${variable} is not set.`, 400);
     }
   });
 };
@@ -51,7 +52,6 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
     console.log(`Email sent successfully to ${options.email}`);
   } catch (error) {
     console.error('Failed to send email:', error);
-    throw new Error('Email sending failed. Please try again later.');
   }
 };
 

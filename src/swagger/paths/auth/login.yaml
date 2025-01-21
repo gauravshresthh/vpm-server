@@ -3,7 +3,7 @@
      summary: User login
      description: Allows users to log in with their email and password to receive a JWT token.
      tags:
-        - Auth
+        - Auth (Public)
      requestBody:
        required: true
        content:

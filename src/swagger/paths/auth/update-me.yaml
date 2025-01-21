@@ -3,7 +3,7 @@
     summary: Update authenticated user's details
     description: Updates the authenticated user's non-password details, such as `name` or `photo`. This route does not handle password updates.
     tags:
-      - Profile
+       - Auth (Protected)
     security:
       - bearerAuth: []
     requestBody:

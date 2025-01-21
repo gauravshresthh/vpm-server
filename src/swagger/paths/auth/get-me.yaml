@@ -3,7 +3,7 @@
       summary: Get authenticated user's details
       description: Fetches details of the authenticated user based on the provided JWT.
       tags:
-        - Profile
+        - Auth (Protected)
       security:
         - bearerAuth: []
       responses:

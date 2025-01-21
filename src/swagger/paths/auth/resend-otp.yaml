@@ -3,7 +3,7 @@
       summary: Resend OTP to user's email
       description: Sends a new OTP to the user's email if they are not yet verified.
       tags:
-        - Auth
+        - Auth (Public)
       requestBody:
         required: true
         content:
