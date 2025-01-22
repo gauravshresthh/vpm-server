@@ -25,5 +25,5 @@ jobs:
           git pull origin production
           npm install
           npm run build
-          pm2 restart my-app || pm2 start dist/server.js --name vpms-server
+          pm2 restart my-app || pm2 start dist/server.js --name vpms
           EOF
