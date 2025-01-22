@@ -20,7 +20,7 @@ jobs:
 
       - name: Deploy code to server
         run: |
-          ssh -o StrictHostKeyChecking=no user@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no vpmsadmin@${{ secrets.SERVER_IP }} << 'EOF'
           cd /server
           git pull origin production
           npm install
