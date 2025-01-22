@@ -21,7 +21,7 @@ jobs:
       - name: Deploy code to server
         run: |
           ssh -o StrictHostKeyChecking=no vpmsadmin@${{ secrets.SERVER_IP }} << 'EOF'
-          cd /server
+          cd Vocational-Placement-Management-BACKEND
           git pull origin production
           npm install
           npm run build
