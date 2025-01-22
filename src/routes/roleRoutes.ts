@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { authorize } from '../middlewares/authorize';
 import { authenticate } from '../middlewares/authenticate';
+import checkPermissions from '../middlewares/checkPermissions';
+import roleController from '../controllers/roleController';
 
 const router = Router();
 
@@ -8,9 +10,9 @@ router.get(
   '/',
   authenticate,
   authorize(['super-admin']),
-  (_req: Request, res: Response) => {
-    res.send('Super Admin Access');
-  }
+  authorize(['super-admin']),
+  checkPermissions('role-management', 'read'),
+  roleController.findAll
 );
 
 router.get(

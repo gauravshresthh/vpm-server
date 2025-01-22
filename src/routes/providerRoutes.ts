@@ -12,7 +12,7 @@ router.post(
   '/',
   authenticate,
   authorize(['super-admin']),
-  checkPermissions('college-settings', 'write'),
+  checkPermissions('college-management', 'write'),
   sanitize(createProviderValidationSchema),
   providerController.create
 );
@@ -21,7 +21,7 @@ router.get(
   '/',
   authenticate,
   authorize(['super-admin']),
-  checkPermissions('college-settings', 'read'),
+  checkPermissions('college-management', 'read'),
   providerController.findAll
 );
 

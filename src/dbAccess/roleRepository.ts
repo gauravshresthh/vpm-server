@@ -1,7 +1,7 @@
 import { IRole, Role } from '../models/roleModel';
 
 // Create a new role
-const createRole = async (payload: IRole) => {
+const create = async (payload: IRole) => {
   const role = new Role(payload);
   return await role.save();
 };
@@ -12,12 +12,12 @@ const findRoleByName = async (name: string) => {
 };
 
 // Find all roles
-const findAllRoles = async () => {
+const findAll = async () => {
   return await Role.find();
 };
 
 // Update role details
-const updateRole = async (
+const updateById = async (
   roleId: string,
   payload: Partial<{
     name: string;
@@ -28,7 +28,7 @@ const updateRole = async (
 };
 
 // Delete a role
-const deleteRole = async (roleId: string) => {
+const deleteRoleById = async (roleId: string) => {
   return await Role.findByIdAndDelete(roleId);
 };
 
@@ -56,11 +56,11 @@ const assignPermissionsToModule = async (
 };
 
 const roleRepository = {
-  createRole,
+  create,
   findRoleByName,
-  findAllRoles,
-  updateRole,
-  deleteRole,
+  findAll,
+  updateById,
+  deleteRoleById,
   assignPermissionsToModule,
 };
 

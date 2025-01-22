@@ -8,7 +8,7 @@ const createRole = async (payload: IRole) => {
   if (existingRole) {
     throw new CustomError('Role already exists', 400);
   }
-  return await roleRepository.createRole(payload);
+  return await roleRepository.create(payload);
 };
 
 // Service to find a role by name
@@ -21,8 +21,8 @@ const findRoleByName = async (name: string) => {
 };
 
 // Service to get all roles
-const findAllRoles = async () => {
-  return await roleRepository.findAllRoles();
+const findAll = async () => {
+  return await roleRepository.findAll();
 };
 
 // Service to update role details
@@ -30,7 +30,7 @@ const updateRole = async (
   roleId: string,
   payload: Partial<{ name: string; permissions: Record<string, string[]> }>
 ) => {
-  const updatedRole = await roleRepository.updateRole(roleId, payload);
+  const updatedRole = await roleRepository.updateById(roleId, payload);
   if (!updatedRole) {
     throw new CustomError('Role not found', 400);
   }
@@ -39,7 +39,7 @@ const updateRole = async (
 
 // Service to delete a role
 const deleteRole = async (roleId: string) => {
-  const deletedRole = await roleRepository.deleteRole(roleId);
+  const deletedRole = await roleRepository.deleteRoleById(roleId);
   if (!deletedRole) {
     throw new CustomError('Role not found', 400);
   }
@@ -63,13 +63,13 @@ const assignPermissionsToModule = async (
   return updatedRole;
 };
 
-const roleServices = {
+const roleService = {
   createRole,
   findRoleByName,
-  findAllRoles,
+  findAll,
   updateRole,
   deleteRole,
   assignPermissionsToModule,
 };
 
-export default roleServices;
+export default roleService;

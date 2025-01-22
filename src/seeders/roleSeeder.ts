@@ -7,11 +7,12 @@ const seedRolesWithPermissions = async () => {
     {
       name: 'super-admin',
       permissions: {
-        'college-settings': ['all'],
+        'college-management': ['all'],
         'course-management': ['all'],
         'student-management': ['all'],
         'facility-management': ['all'],
         'placement-management': ['all'],
+        'role-management': ['all'],
       },
     },
     {
@@ -22,6 +23,7 @@ const seedRolesWithPermissions = async () => {
         'student-management': ['all'],
         'facility-management': ['all'],
         'placement-management': ['all'],
+        'role-management': ['all'],
       },
     },
     {
@@ -32,6 +34,7 @@ const seedRolesWithPermissions = async () => {
         'student-management': ['read', 'write'],
         'facility-management': ['read', 'write'],
         'placement-management': ['read', 'write'],
+        'role-management': ['all'],
       },
     },
     {
@@ -42,6 +45,7 @@ const seedRolesWithPermissions = async () => {
         'student-management': ['read', 'create'],
         'facility-management': ['read', 'create'],
         'placement-management': ['read', 'create'],
+        'role-management': ['read'],
       },
     },
     {
@@ -52,6 +56,7 @@ const seedRolesWithPermissions = async () => {
         'student-management': ['read', 'write'],
         'facility-management': ['read'],
         'placement-management': ['read'],
+        'role-management': ['read'],
       },
     },
     {
@@ -62,6 +67,7 @@ const seedRolesWithPermissions = async () => {
         'student-management': ['read', 'write'],
         'facility-management': ['read'],
         'placement-management': ['read'],
+        'role-management': ['read'],
       },
     },
     {
