@@ -3,7 +3,7 @@ name: Deploy Node.js Server for VPMS
 on:
   push:
     branches:
-      - main  
+      - production  
 
 jobs:
   deploy:
@@ -22,7 +22,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no user@${{ secrets.SERVER_IP }} << 'EOF'
           cd /server
-          git pull origin main
+          git pull origin production
           npm install
           npm run build
           pm2 restart my-app || pm2 start dist/server.js --name my-app
