@@ -20,9 +20,10 @@ jobs:
 
       - name: Deploy code to server
         run: |
-          ssh -o StrictHostKeyChecking=no user@your-server-ip << 'EOF'
-          cd /path/to/your/app
+          ssh -o StrictHostKeyChecking=no user@20.92.145.247 << 'EOF'
+          cd /server
           git pull origin main
           npm install
-          pm2 restart my-app || pm2 start server.js --name my-app
+          npm run build
+          pm2 restart my-app || pm2 start dist/server.js --name my-app
           EOF
