@@ -20,10 +20,10 @@ jobs:
 
       - name: Deploy code to server
         run: |
-          ssh -o StrictHostKeyChecking=no user@${{ secrets.SERVER_IP }} << 'EOF'
-          cd /server
+          ssh -o StrictHostKeyChecking=no vpmsadmin@${{ secrets.SERVER_IP }} << 'EOF'
+          cd Vocational-Placement-Management-BACKEND
           git pull origin production
           npm install
           npm run build
-          pm2 restart my-app || pm2 start dist/server.js --name my-app
+          pm2 restart my-app || pm2 start dist/server.js --name vpms-server
           EOF
