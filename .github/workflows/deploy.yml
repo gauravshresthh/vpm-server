@@ -20,7 +20,7 @@ jobs:
 
       - name: Deploy code to server
         run: |
-          ssh -o StrictHostKeyChecking=no user@20.92.145.247 << 'EOF'
+          ssh -o StrictHostKeyChecking=no user@${{ secrets.SERVER_IP }} << 'EOF'
           cd /server
           git pull origin main
           npm install
