@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
-import { DocumentCategoryModel, IDocumentCategory } from '../models/documentCategoryModel';
+import {
+  DocumentCategoryModel,
+  IDocumentCategory,
+} from '../models/documentCategoryModel';
 
 // Create a new document category
 const createDocumentCategory = async (payload: IDocumentCategory) => {
@@ -24,7 +27,9 @@ const updateDocumentCategory = async (
   categoryId: string,
   payload: Partial<IDocumentCategory>
 ) => {
-  return await DocumentCategoryModel.findByIdAndUpdate(categoryId, payload, { new: true });
+  return await DocumentCategoryModel.findByIdAndUpdate(categoryId, payload, {
+    new: true,
+  });
 };
 
 // Delete a document category by ID

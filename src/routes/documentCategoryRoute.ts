@@ -2,7 +2,10 @@ import { Router } from 'express';
 import { authenticate } from '../middlewares/authenticate';
 import { authorize } from '../middlewares/authorize';
 import checkPermissions from '../middlewares/checkPermissions';
-import { createDocumentCategoryValidationSchema, updateDocumentCategoryValidationSchema } from '../validations/documentCategoryValidation';
+import {
+  createDocumentCategoryValidationSchema,
+  updateDocumentCategoryValidationSchema,
+} from '../validations/documentCategoryValidation';
 import sanitize from '../middlewares/sanitize';
 import documentCategoryController from '../controllers/documentCategoryContoller';
 

@@ -9,7 +9,8 @@ const create = async (payload: IDocumentCategory) => {
 
 // Service to find a document category by ID
 const findById = async (categoryId: string) => {
-  const documentCategory = await documentCategoryRepository.findDocumentCategoryById(categoryId);
+  const documentCategory =
+    await documentCategoryRepository.findDocumentCategoryById(categoryId);
   if (!documentCategory) {
     throw new CustomError('Document category not found', 400);
   }
@@ -22,8 +23,15 @@ const findAll = async () => {
 };
 
 // Service to update a document category by ID
-const updateById = async (categoryId: string, payload: Partial<IDocumentCategory>) => {
-  const updatedDocumentCategory = await documentCategoryRepository.updateDocumentCategory(categoryId, payload);
+const updateById = async (
+  categoryId: string,
+  payload: Partial<IDocumentCategory>
+) => {
+  const updatedDocumentCategory =
+    await documentCategoryRepository.updateDocumentCategory(
+      categoryId,
+      payload
+    );
   if (!updatedDocumentCategory) {
     throw new CustomError('Document category not found', 400);
   }
@@ -32,7 +40,8 @@ const updateById = async (categoryId: string, payload: Partial<IDocumentCategory
 
 // Service to delete a document category by ID
 const deleteById = async (categoryId: string) => {
-  const deletedDocumentCategory = await documentCategoryRepository.deleteDocumentCategory(categoryId);
+  const deletedDocumentCategory =
+    await documentCategoryRepository.deleteDocumentCategory(categoryId);
   if (!deletedDocumentCategory) {
     throw new CustomError('Document category not found', 400);
   }

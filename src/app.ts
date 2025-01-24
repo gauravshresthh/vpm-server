@@ -14,7 +14,7 @@ import authRoutes from './routes/authRoutes';
 import roleRoutes from './routes/roleRoutes';
 import superAdminRoutes from './routes/superAdminRoutes';
 import providerRoutes from './routes/providerRoutes';
-import documentRoutes from './routes/documentRoutes'
+import documentRoutes from './routes/documentRoutes';
 
 import swaggerUi from 'swagger-ui-express';
 
