@@ -42,9 +42,13 @@ export const swaggerOptions: swaggerJSDoc.Options = {
         description: 'Development server',
       },
       {
-        url: 'https://api.production-url.com',
+        url: 'https://api.queensford.com.au',
         description: 'Production server',
       },
+      {
+        url: 'http://20.92.145.247:8000',
+        description: 'Production server url with port',
+      }
     ],
     components: {
       schemas: schemas,
