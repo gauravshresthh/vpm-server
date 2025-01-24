@@ -1,0 +1,35 @@
+/api/v1/documents/{id}:
+  delete:
+    summary: Delete a document by ID
+    description: Delete a document by its unique ID. This API is restricted to authenticated users with the necessary permissions.
+    tags:
+      - Documents (Protected)
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The ID of the document to delete
+    responses:
+      '200':
+        description: Document deleted successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: "Document deleted successfully"
+      '404':
+        description: Document not found
+      '401':
+        description: Unauthorized access - invalid token
+      '403':
+        description: Forbidden - insufficient permissions

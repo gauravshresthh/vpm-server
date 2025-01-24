@@ -1,0 +1,41 @@
+/api/v1/documents/{id}/version/{versionId}:
+  delete:
+    summary: Remove a version from a document
+    description: Removes a specific version of a document by its version ID. This API is restricted to authenticated users with the necessary permissions.
+    tags:
+      - Documents (Protected)
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The ID of the document
+      - in: path
+        name: versionId
+        required: true
+        schema:
+          type: string
+        description: The version ID of the document to remove
+    responses:
+      '200':
+        description: Version removed successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: "Version removed successfully"
+      '404':
+        description: Document or version not found
+      '401':
+        description: Unauthorized access - invalid token
+      '403':
+        description: Forbidden - insufficient permissions

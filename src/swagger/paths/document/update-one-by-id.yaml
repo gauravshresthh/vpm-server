@@ -1,0 +1,70 @@
+/api/v1/documents/{id}:
+  put:
+    summary: Update a document by ID
+    description: Update a document's details by its unique ID. This API is restricted to authenticated users with the necessary permissions.
+    tags:
+      - Documents (Protected)
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The ID of the document to update
+    requestBody:
+      description: Payload to update a document
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+                example: "Updated Document.pdf"
+                description: Name of the document file
+              file_type:
+                type: string
+                enum: [pdf, csv, doc, docx, image, other]
+                example: "pdf"
+                description: Type of the file
+              size:
+                type: number
+                example: 102400
+                description: Size of the file in bytes
+              visibility:
+                type: string
+                enum: [public, private]
+                example: "public"
+                description: Visibility of the document
+    responses:
+      '200':
+        description: Document updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: "Document updated successfully"
+                data:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      example: "60f42a16bdf7c75e43fe9021"
+                    filename:
+                      type: string
+                      example: "Updated Document.pdf"
+      '400':
+        description: Bad request - Validation errors
+      '401':
+        description: Unauthorized access - invalid token
+      '403':
+        description: Forbidden - insufficient permissions

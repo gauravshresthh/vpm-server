@@ -1,0 +1,49 @@
+/api/v1/documents/{id}/version:
+  post:
+    summary: Add a version to a document
+    description: Adds a new version to an existing document by its ID. This API is restricted to authenticated users with the necessary permissions.
+    tags:
+      - Documents (Protected)
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The ID of the document to add a version to
+    requestBody:
+      description: Payload to add a version to a document
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+                example: "Updated Introduction to Programming.pdf"
+              size:
+                type: number
+                example: 102400
+    responses:
+      '200':
+        description: Version added successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: "Version added successfully"
+      '404':
+        description: Document not found
+      '401':
+        description: Unauthorized access - invalid token
+      '403':
+        description: Forbidden - insufficient permissions

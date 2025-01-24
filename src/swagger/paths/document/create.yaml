@@ -1,0 +1,137 @@
+/api/v1/documents:
+  post:
+    summary: Create a new document
+    description: Adds a new document, including file details, versions, and category. This API is restricted to authenticated users with the necessary permissions.
+    tags:
+      - Documents (Protected)
+    security:
+      - bearerAuth: []
+    requestBody:
+      description: Payload to create a new document
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+                example: "Introduction to Programming.pdf"
+                description: Name of the document file
+              file_type:
+                type: string
+                enum: [pdf, csv, doc, docx, image, other]
+                example: "pdf"
+                description: Type of the file
+              parent_id:
+                type: string
+                example: "60f42a16bdf7c75e43fe901f"
+                description: The parent document's ID (if any)
+              category:
+                type: string
+                example: "60f42a16bdf7c75e43fe9020"
+                description: The category ID the document belongs to
+              is_folder:
+                type: boolean
+                example: false
+                description: Whether the document is a folder
+              size:
+                type: number
+                example: 102400
+                description: Size of the file in bytes
+              versions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    filename:
+                      type: string
+                      example: "Introduction to Programming - v1.pdf"
+                      description: Name of the versioned document
+                    uploaded_by:
+                      type: string
+                      example: "admin"
+                      description: The user who uploaded the version
+                    upload_date:
+                      type: string
+                      format: date-time
+                      example: "2025-01-25T08:00:00Z"
+                      description: Upload date of the version
+                    size:
+                      type: number
+                      example: 102400
+                      description: File size of the version
+                    is_current:
+                      type: boolean
+                      example: true
+                      description: Whether this version is the current one
+              starred:
+                type: boolean
+                example: false
+                description: Whether the document is starred
+              recent:
+                type: boolean
+                example: false
+                description: Whether the document is marked as recent
+              visibility:
+                type: string
+                enum: [public, private]
+                example: "private"
+                description: Visibility status of the document (public or private)
+    responses:
+      '201':
+        description: Document created successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: "Document created successfully"
+                data:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      example: "60f42a16bdf7c75e43fe9021"
+                    filename:
+                      type: string
+                      example: "Introduction to Programming.pdf"
+                    file_type:
+                      type: string
+                      example: "pdf"
+                    size:
+                      type: number
+                      example: 102400
+      '400':
+        description: Bad request - Validation errors
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: "Validation error: Filename is required"
+      '401':
+        description: Unauthorized access - invalid token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: "Unauthorized access - invalid token"
+      '403':
+        description: Forbidden - insufficient permissions

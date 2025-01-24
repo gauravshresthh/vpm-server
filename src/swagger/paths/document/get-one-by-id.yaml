@@ -1,0 +1,76 @@
+/api/v1/documents/{id}:
+  get:
+    summary: Retrieve a document by ID
+    description: Fetch a document by its unique ID. This API is restricted to authenticated users with the necessary permissions.
+    tags:
+      - Documents (Protected)
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The ID of the document
+    responses:
+      '200':
+        description: Document retrieved successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: "Document fetched successfully"
+                data:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      example: "60f42a16bdf7c75e43fe9021"
+                    filename:
+                      type: string
+                      example: "Introduction to Programming.pdf"
+                    file_type:
+                      type: string
+                      example: "pdf"
+                    size:
+                      type: number
+                      example: 102400
+                    visibility:
+                      type: string
+                      enum: [public, private]
+                      example: "private"
+      '404':
+        description: Document not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: "Document not found"
+      '401':
+        description: Unauthorized access - invalid token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: "Unauthorized access - invalid token"
+      '403':
+        description: Forbidden - insufficient permissions

@@ -1,0 +1,46 @@
+/api/v1/documents/parent/{parentId}:
+  get:
+    summary: Retrieve documents by parent ID
+    description: Fetch all documents under a specific parent (for folders). This API is restricted to authenticated users with the necessary permissions.
+    tags:
+      - Documents (Protected)
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: parentId
+        required: true
+        schema:
+          type: string
+        description: The ID of the parent document (folder)
+    responses:
+      '200':
+        description: Documents under the parent retrieved successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: "Documents fetched under parent successfully"
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "60f42a16bdf7c75e43fe9021"
+                      filename:
+                        type: string
+                        example: "Introduction to Programming.pdf"
+      '404':
+        description: Parent document not found
+      '401':
+        description: Unauthorized access - invalid token
+      '403':
+        description: Forbidden - insufficient permissions

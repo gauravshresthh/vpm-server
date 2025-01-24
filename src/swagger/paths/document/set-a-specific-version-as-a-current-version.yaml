@@ -1,0 +1,41 @@
+/api/v1/documents/{id}/version/{versionId}/current:
+  put:
+    summary: Set a version as the current version
+    description: Marks a specific version of a document as the current version. This API is restricted to authenticated users with the necessary permissions.
+    tags:
+      - Documents (Protected)
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The ID of the document
+      - in: path
+        name: versionId
+        required: true
+        schema:
+          type: string
+        description: The version ID to set as current
+    responses:
+      '200':
+        description: Version set as current successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: "Version set as current successfully"
+      '404':
+        description: Document or version not found
+      '401':
+        description: Unauthorized access - invalid token
+      '403':
+        description: Forbidden - insufficient permissions

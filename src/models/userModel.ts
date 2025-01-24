@@ -15,8 +15,8 @@ export interface IUser extends Document {
   user_agent?: string;
   login_at?: Date;
   photo?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at?: Date;
+  updated_at?: Date;
   comparePassword(password: string): Promise<boolean>;
 }
 
@@ -43,7 +43,7 @@ const UserSchema: Schema<IUser> = new Schema(
     login_at: { type: Date },
     photo: { type: String, maxlength: 255 },
   },
-  { timestamps: true }
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
 UserSchema.pre<Query<any, IUser>>(/^find/, function (next) {

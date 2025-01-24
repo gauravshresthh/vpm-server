@@ -3,6 +3,8 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IRole extends Document {
   name: string;
   permissions: Map<string, string[]>;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 const RoleSchema: Schema<IRole> = new Schema(
@@ -29,7 +31,7 @@ const RoleSchema: Schema<IRole> = new Schema(
       },
     },
   },
-  { timestamps: true }
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
 export const Role = mongoose.model<IRole>('Role', RoleSchema);

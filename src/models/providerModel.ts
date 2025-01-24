@@ -1,16 +1,19 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
-const CampusSchema: Schema<ICampus> = new Schema({
-  name: { type: String, required: true },
-  address: {
-    street_line1: { type: String, required: true },
-    street_line2: { type: String },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    postal_code: { type: String, required: true },
-    country: { type: String, required: true },
+const CampusSchema: Schema<ICampus> = new Schema(
+  {
+    name: { type: String, required: true },
+    address: {
+      street_line1: { type: String, required: true },
+      street_line2: { type: String },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      postal_code: { type: String, required: true },
+      country: { type: String, required: true },
+    },
   },
-});
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 const ProviderSchema: Schema<IProvider> = new Schema(
   {
@@ -40,7 +43,7 @@ const ProviderSchema: Schema<IProvider> = new Schema(
     },
     campuses: [CampusSchema],
   },
-  { timestamps: true }
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
 export const Provider: Model<IProvider> = mongoose.model<IProvider>(
@@ -58,6 +61,8 @@ export interface ICampus {
     postal_code: string;
     country: string;
   };
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface IProvider extends Document {
@@ -87,6 +92,6 @@ export interface IProvider extends Document {
     fax?: string;
   };
   campuses: ICampus[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
