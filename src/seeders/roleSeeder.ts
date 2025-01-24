@@ -12,6 +12,7 @@ const seedRolesWithPermissions = async () => {
         'student-management': ['all'],
         'facility-management': ['all'],
         'placement-management': ['all'],
+        'document-management': ['all'],
         'role-management': ['all'],
       },
     },

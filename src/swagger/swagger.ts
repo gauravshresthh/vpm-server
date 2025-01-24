@@ -48,7 +48,7 @@ export const swaggerOptions: swaggerJSDoc.Options = {
       {
         url: 'http://20.92.145.247:8000',
         description: 'Production server url with port',
-      }
+      },
     ],
     components: {
       schemas: schemas,
