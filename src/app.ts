@@ -16,6 +16,9 @@ import superAdminRoutes from './routes/superAdminRoutes';
 import providerRoutes from './routes/providerRoutes';
 import documentRoutes from './routes/documentRoutes';
 import documentCategoryRoutes from './routes/documentCategoryRoutes';
+import conversationRoutes from './routes/conversationRoutes';
+import messageRoutes from './routes/messageRoutes';
+import assignmentRoutes from './routes/assignmentRoutes';
 
 import swaggerUi from 'swagger-ui-express';
 
@@ -74,8 +77,15 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/roles', roleRoutes);
 app.use('/api/v1/super-admin', superAdminRoutes);
 app.use('/api/v1/providers', providerRoutes);
+
+// Document APIs
 app.use('/api/v1/documents', documentRoutes);
 app.use('/api/v1/document-categories', documentCategoryRoutes);
+
+// Inbox APIs
+app.use('/api/v1/conversations', conversationRoutes);
+app.use('/api/v1/messages', messageRoutes);
+app.use('/api/v1/assignments', assignmentRoutes);
 
 app.all('*', (req, res, next) => {
   return next(
