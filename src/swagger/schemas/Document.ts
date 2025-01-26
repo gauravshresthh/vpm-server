@@ -11,6 +11,7 @@ export default {
     is_folder: { type: 'boolean' },
     size: { type: 'number' },
     visibility: { type: 'string', enum: ['public', 'private'] },
+    is_archived: { type: 'boolean' },
     starred: { type: 'boolean' },
     recent: { type: 'boolean' },
     versions: {

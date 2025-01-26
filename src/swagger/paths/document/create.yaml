@@ -35,6 +35,10 @@
                 type: boolean
                 example: false
                 description: Whether the document is a folder
+              is_archived:
+                type: boolean
+                example: false
+                description: Whether the document is a archived
               size:
                 type: number
                 example: 102400

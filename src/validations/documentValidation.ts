@@ -38,8 +38,8 @@ const createDocumentValidationSchema = Joi.object({
   parent_id: Joi.string().optional().allow(null).messages({
     'string.base': 'Parent ID must be a string',
   }),
-  category: Joi.string().required().messages({
-    'string.base': 'Category must be a valid ObjectId',
+  category_id: Joi.string().required().messages({
+    'string.base': 'Category_id must be a valid ObjectId',
     'any.required': 'Category is required',
   }),
   is_folder: Joi.boolean().default(false).optional().messages({
@@ -65,6 +65,9 @@ const createDocumentValidationSchema = Joi.object({
       'string.base': 'Visibility must be a string',
       'any.only': 'Invalid Visibility',
     }),
+  is_archived: Joi.boolean().default(false).optional().messages({
+    'boolean.base': 'is_archived must be a boolean',
+  }),
 }).options({ allowUnknown: false });
 
 // Validation schema for updating a document
@@ -103,6 +106,9 @@ const updateDocumentValidationSchema = Joi.object({
   visibility: Joi.string().valid('public', 'private').optional().messages({
     'string.base': 'Visibility must be a string',
     'any.only': 'Invalid Visibility',
+  }),
+  is_archived: Joi.boolean().default(false).optional().messages({
+    'boolean.base': 'is_archived must be a boolean',
   }),
 }).options({ allowUnknown: false });
 

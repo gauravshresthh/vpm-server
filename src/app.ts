@@ -15,6 +15,7 @@ import roleRoutes from './routes/roleRoutes';
 import superAdminRoutes from './routes/superAdminRoutes';
 import providerRoutes from './routes/providerRoutes';
 import documentRoutes from './routes/documentRoutes';
+import documentCategoryRoutes from './routes/documentCategoryRoutes';
 
 import swaggerUi from 'swagger-ui-express';
 
@@ -74,6 +75,7 @@ app.use('/api/v1/roles', roleRoutes);
 app.use('/api/v1/super-admin', superAdminRoutes);
 app.use('/api/v1/providers', providerRoutes);
 app.use('/api/v1/documents', documentRoutes);
+app.use('/api/v1/document-categories', documentCategoryRoutes);
 
 app.all('*', (req, res, next) => {
   return next(

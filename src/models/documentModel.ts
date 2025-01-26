@@ -16,13 +16,14 @@ export interface IDocument extends Document {
   filename: string;
   file_type: string;
   parent_id?: mongoose.Types.ObjectId | null;
-  category: mongoose.Types.ObjectId | IDocumentCategory;
+  category_id: mongoose.Types.ObjectId | IDocumentCategory;
   is_folder: boolean;
   size?: number;
   versions: IVersion[];
   starred: boolean;
   recent: boolean;
   visibility: 'public' | 'private';
+  is_archived: boolean;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -71,7 +72,7 @@ const document_schema: Schema<IDocument> = new Schema<IDocument>(
       ref: 'Document',
       default: null,
     },
-    category: {
+    category_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'DocumentCategory',
       required: true,
@@ -97,6 +98,10 @@ const document_schema: Schema<IDocument> = new Schema<IDocument>(
       type: String,
       enum: ['public', 'private'],
       default: 'private',
+    },
+    is_archived: {
+      type: Boolean,
+      default: false,
     },
   },
   {
