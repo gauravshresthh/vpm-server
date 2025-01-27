@@ -5,7 +5,10 @@ import Joi from 'joi';
 const sanitize = (schema: Joi.ObjectSchema) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await schema.validateAsync(req.body);
+      // await schema.validateAsync(req.body);
+      const payload = { ...req.body, ...req.query, ...req.params };
+      await schema.validateAsync(payload);
+
       next();
     } catch (error: any) {
       res.status(400).json({

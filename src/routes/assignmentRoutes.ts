@@ -11,7 +11,7 @@ router.post(
   '/assign',
   authenticate,
   // authorize(['admin']),
-  // checkPermissions('conversation-management', 'write'),
+  // checkPermissions('conversation-management', 'update'),
   sanitize(assignConversationValidationSchema),
   AssignmentController.assignConversation
 );

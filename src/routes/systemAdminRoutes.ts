@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/authenticate';
 import { authorize } from '../middlewares/authorize';
-import superAdminController from '../controllers/superAdminController';
+import systemAdminController from '../controllers/systemAdminController';
 import sanitize from '../middlewares/sanitize';
-import { createUserValidationSchema } from '../validations/superAdminValidation';
+import { createUserValidationSchema } from '../validations/systemAdminValidation';
 import checkPermissions from '../middlewares/checkPermissions';
 
 const router = Router();
@@ -11,15 +11,15 @@ const router = Router();
 router.post(
   '/create-user',
   authenticate,
-  authorize(['super-admin']),
+  authorize(['system-admin']),
   sanitize(createUserValidationSchema),
-  superAdminController.createUser
+  systemAdminController.createUser
 );
 
 router.get(
   '/college-settings',
   authenticate,
-  authorize(['super-admin']),
+  authorize(['system-admin']),
   checkPermissions('college-settings', 'read'),
   (req, res) => {
     res.send('Accessed College Settings');

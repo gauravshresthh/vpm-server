@@ -15,8 +15,8 @@ const router = Router();
 router.post(
   '/',
   authenticate,
-  authorize(['super-admin', 'editor']),
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin', 'editor']),
+  checkPermissions('document-management', 'create'),
   sanitize(createDocumentCategoryValidationSchema),
   documentCategoryController.create
 );
@@ -25,7 +25,7 @@ router.post(
 router.get(
   '/',
   authenticate,
-  authorize(['super-admin', 'editor', 'viewer']),
+  authorize(['system-admin', 'editor', 'viewer']),
   checkPermissions('document-management', 'read'),
   documentCategoryController.findAll
 );
@@ -34,7 +34,7 @@ router.get(
 router.get(
   '/:id',
   authenticate,
-  authorize(['super-admin', 'editor', 'viewer']),
+  authorize(['system-admin', 'editor', 'viewer']),
   checkPermissions('document-management', 'read'),
   documentCategoryController.findById
 );
@@ -43,8 +43,8 @@ router.get(
 router.put(
   '/:id',
   authenticate,
-  authorize(['super-admin', 'editor']),
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin', 'editor']),
+  checkPermissions('document-management', 'update'),
   sanitize(updateDocumentCategoryValidationSchema),
   documentCategoryController.updateById
 );
@@ -53,8 +53,8 @@ router.put(
 router.delete(
   '/:id',
   authenticate,
-  authorize(['super-admin']),
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin']),
+  checkPermissions('document-management', 'delete'),
   documentCategoryController.deleteById
 );
 

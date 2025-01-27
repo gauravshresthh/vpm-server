@@ -14,7 +14,7 @@ const createUserValidationSchema = Joi.object({
     'string.base': 'Password must be a string',
     'any.required': 'Password is required',
   }),
-  role: Joi.string()
+  roles: Joi.string()
     .valid(
       'system-admin',
       'college-admin',
@@ -26,7 +26,7 @@ const createUserValidationSchema = Joi.object({
     )
     .required()
     .messages({
-      'string.base': 'Role must be a string',
+      'string.base': 'Role must be an array of strings',
       'any.required': 'Role is required',
       'any.only':
         'Role must be one of the following: system-admin, college-admin, vpo, vp-provider, facilitator, trainer, student',

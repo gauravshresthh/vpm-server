@@ -9,25 +9,25 @@ const router = Router();
 router.get(
   '/',
   authenticate,
-  authorize(['super-admin']),
-  authorize(['super-admin']),
+  authorize(['system-admin']),
+  authorize(['system-admin']),
   checkPermissions('role-management', 'read'),
   roleController.findAll
 );
 
 router.get(
-  '/super-admin',
+  '/system-admin',
   authenticate,
-  authorize(['super-admin']),
+  authorize(['system-admin']),
   (_req: Request, res: Response) => {
-    res.send('Super Admin Access');
+    res.send('System Admin Access');
   }
 );
 
 router.get(
   '/vpo',
   authenticate,
-  authorize(['vpo', 'super-admin']),
+  authorize(['vpo', 'system-admin']),
   (_req: Request, res: Response) => {
     res.send('VPO Access');
   }

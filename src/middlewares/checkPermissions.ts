@@ -13,36 +13,40 @@ const checkPermissions =
         return next(new CustomError('User is not authenticated', 401));
       }
 
-      const user = await User.findById(userFromRequest.id).populate('role');
+      const user = await User.findById(userFromRequest.id).populate('roles');
       if (!user) {
         return next(new CustomError('User not found', 404));
       }
 
-      const role = user.role as unknown as IRole | null;
-      if (!role) {
-        return next(new CustomError('Role not assigned to the user', 403));
+      const roles = user.roles as unknown as IRole[]; // User now has multiple roles
+      if (!roles || roles.length === 0) {
+        return next(new CustomError('No roles assigned to the user', 403));
       }
 
-      const allowedActions = role.permissions.get(feature);
+      // Check permissions across all assigned roles
+      for (const role of roles) {
+        const allowedActions = role.permissions.get(feature);
 
-      // Check if the role has 'all' access
-      if (allowedActions?.includes('all')) {
-        return next();
+        // Grant access if any role has 'all' access
+        if (allowedActions?.includes('all')) {
+          return next();
+        }
+
+        // Grant access if any role allows the specific action
+        if (allowedActions?.includes(action)) {
+          return next();
+        }
       }
 
-      // Check if the specific action is allowed
-      if (!allowedActions || !allowedActions.includes(action)) {
-        return next(
-          new CustomError(
-            `Access denied: '${action}' permission on '${feature}'`,
-            403
-          )
-        );
-      }
-
-      next();
+      // If no roles grant the required permission
+      return next(
+        new CustomError(
+          `Access denied: '${action}' permission on '${feature}'`,
+          403
+        )
+      );
     } catch (error) {
-      console.log(error);
+      console.error(error);
       next(new CustomError('Internal server error', 500));
     }
   };

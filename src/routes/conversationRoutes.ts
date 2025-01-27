@@ -16,7 +16,7 @@ router.post(
   '/',
   authenticate,
   // authorize(['user', 'admin']),
-  // checkPermissions('conversation-management', 'write'),
+  // checkPermissions('conversation-management', 'update'),
   sanitize(createConversationValidationSchema),
   ConversationController.createConversation
 );
@@ -27,7 +27,7 @@ router.post(
   '/message',
   authenticate,
   // authorize(['user', 'admin']),
-  // checkPermissions('conversation-management', 'write'),
+  // checkPermissions('conversation-management', 'update'),
   sanitize(addMessageValidationSchema),
   ConversationController.addMessage
 );

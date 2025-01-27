@@ -49,9 +49,9 @@
                          email:
                            type: string
                            example: 'user@example.com'
-                         role:
-                           type: string
-                           example: 'student'
+                         roles:
+                           type: string[]
+                           example: ['student']
        404:
          description: User not found
          content:

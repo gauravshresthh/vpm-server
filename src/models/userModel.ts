@@ -5,7 +5,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: mongoose.Types.ObjectId;
+  roles: mongoose.Types.ObjectId[];
   is_verified?: boolean;
   otp?: string;
   otp_expiry?: Date;
@@ -15,6 +15,7 @@ export interface IUser extends Document {
   user_agent?: string;
   login_at?: Date;
   photo?: string;
+  phone_number?: string;
   created_at?: Date;
   updated_at?: Date;
   comparePassword(password: string): Promise<boolean>;
@@ -25,7 +26,9 @@ const UserSchema: Schema<IUser> = new Schema(
     name: { type: String, required: true, maxlength: 255 },
     email: { type: String, required: true, unique: true, maxlength: 255 },
     password: { type: String, required: true, maxlength: 255 },
-    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
+    roles: [
+      { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
+    ],
     is_verified: {
       type: Boolean,
       default: false,
@@ -41,10 +44,44 @@ const UserSchema: Schema<IUser> = new Schema(
     ip_address: { type: String, maxlength: 255 },
     user_agent: { type: String, maxlength: 255 },
     login_at: { type: Date },
-    photo: { type: String, maxlength: 255 },
+    photo: { type: String, maxlength: 255, default: '' },
+    phone_number: { type: String, maxlength: 255, default: '' },
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
+
+UserSchema.pre<Query<any, IUser>>(/^find/, function (next) {
+  // Only exclude 'password' if it's not explicitly requested
+  const selectQuery = this.getQuery().select;
+
+  // If '+password' is explicitly included in the select query, we don't exclude it
+  if (selectQuery && !selectQuery.includes('+password')) {
+    this.select('-password');
+  }
+  next();
+});
+
+UserSchema.post('findOneAndUpdate', function (doc) {
+  if (doc) {
+    doc.password = undefined;
+  }
+});
+
+UserSchema.set('toObject', {
+  transform: function (doc, ret) {
+    delete ret.password;
+    delete ret.__v;
+    return ret;
+  },
+});
+
+UserSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    delete ret.password;
+    delete ret.__v;
+    return ret;
+  },
+});
 
 UserSchema.pre<Query<any, IUser>>(/^find/, function (next) {
   this.find({ active: true });
@@ -73,6 +110,6 @@ UserSchema.methods.comparePassword = function (
   return bcrypt.compare(password, this.password);
 };
 
-UserSchema.index({ role: 1, active: 1 });
+UserSchema.index({ roles: 1, active: 1 });
 
 export const User = mongoose.model<IUser>('User', UserSchema);

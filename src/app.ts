@@ -11,8 +11,9 @@ import passport from './config/passport';
 import session from 'express-session';
 
 import authRoutes from './routes/authRoutes';
+import userRoutes from './routes/userRoutes';
 import roleRoutes from './routes/roleRoutes';
-import superAdminRoutes from './routes/superAdminRoutes';
+import systemAdminRoutes from './routes/systemAdminRoutes';
 import providerRoutes from './routes/providerRoutes';
 import documentRoutes from './routes/documentRoutes';
 import documentCategoryRoutes from './routes/documentCategoryRoutes';
@@ -74,8 +75,9 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/roles', roleRoutes);
-app.use('/api/v1/super-admin', superAdminRoutes);
+app.use('/api/v1/system-admin', systemAdminRoutes);
 app.use('/api/v1/providers', providerRoutes);
 
 // Document APIs

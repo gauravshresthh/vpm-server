@@ -5,43 +5,30 @@ import { Role } from '../models/roleModel';
 const seedRolesWithPermissions = async () => {
   const roles = [
     {
-      name: 'super-admin',
-      permissions: {
-        'college-management': ['all'],
-        'course-management': ['all'],
-        'student-management': ['all'],
-        'facility-management': ['all'],
-        'placement-management': ['all'],
-        'document-management': ['all'],
-        'role-management': ['all'],
-      },
-    },
-    {
       name: 'system-admin',
       permissions: {
-        'college-settings': ['all'],
-        'course-management': ['all'],
-        'student-management': ['all'],
-        'facility-management': ['all'],
-        'placement-management': ['all'],
-        'role-management': ['all'],
+        'college-settings': ['create', 'read', 'update', 'delete'],
+        'course-management': ['create', 'read', 'update', 'delete'],
+        'student-management': ['create', 'read', 'update', 'delete'],
+        'facility-management': ['create', 'read', 'update', 'delete'],
+        'placement-management': ['create', 'read', 'update', 'delete'],
+        'role-management': ['create', 'read', 'update', 'delete'],
       },
     },
     {
       name: 'vpo',
       permissions: {
-        'college-settings': ['read', 'write'],
+        'college-settings': ['read', 'create'],
         'course-management': ['read'],
-        'student-management': ['read', 'write'],
-        'facility-management': ['read', 'write'],
-        'placement-management': ['read', 'write'],
-        'role-management': ['all'],
+        'student-management': ['read', 'create'],
+        'facility-management': ['read', 'create'],
+        'placement-management': ['read', 'create'],
       },
     },
     {
       name: 'vp-provider',
       permissions: {
-        'college-settings': ['read', 'write'],
+        'college-settings': ['read', 'create'],
         'course-management': ['read'],
         'student-management': ['read', 'create'],
         'facility-management': ['read', 'create'],
@@ -54,7 +41,7 @@ const seedRolesWithPermissions = async () => {
       permissions: {
         'college-settings': ['read'],
         'course-management': ['read'],
-        'student-management': ['read', 'write'],
+        'student-management': ['read', 'create'],
         'facility-management': ['read'],
         'placement-management': ['read'],
         'role-management': ['read'],
@@ -65,7 +52,7 @@ const seedRolesWithPermissions = async () => {
       permissions: {
         'college-settings': ['read'],
         'course-management': ['read', 'create'],
-        'student-management': ['read', 'write'],
+        'student-management': ['read', 'create'],
         'facility-management': ['read'],
         'placement-management': ['read'],
         'role-management': ['read'],

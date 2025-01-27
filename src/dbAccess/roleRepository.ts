@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { IRole, Role } from '../models/roleModel';
 
 // Create a new role
@@ -11,9 +12,23 @@ const findRoleByName = async (name: string) => {
   return await Role.findOne({ name });
 };
 
+// Find a role by Id
+const findRoleById = async (roleId: mongoose.Schema.Types.ObjectId) => {
+  return await Role.findOne({ _id: roleId });
+};
+
+// Find only role name by Id
+const findOnlyRoleNameById = async (roleId: mongoose.Schema.Types.ObjectId) => {
+  return await Role.findOne({ _id: roleId }).select('name');
+};
+
 // Find all roles
 const findAll = async () => {
   return await Role.find();
+};
+
+const findAllRoleWithNamesOnly = async () => {
+  return await Role.find().select('name');
 };
 
 // Update role details
@@ -43,25 +58,25 @@ const assignPermissionsToModule = async (
     throw new Error('Role not found');
   }
 
-  // Check if the role.permissions is a Map
   if (!(role.permissions instanceof Map)) {
     throw new Error('Role permissions must be a Map');
   }
 
-  // Set the permissions for the module
   role.permissions.set(module, permissions);
 
-  // Save the updated role
   return await role.save();
 };
 
 const roleRepository = {
   create,
+  findRoleById,
+  findOnlyRoleNameById,
   findRoleByName,
   findAll,
   updateById,
   deleteRoleById,
   assignPermissionsToModule,
+  findAllRoleWithNamesOnly,
 };
 
 export default roleRepository;

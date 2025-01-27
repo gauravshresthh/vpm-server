@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import roleRepository from '../dbAccess/roleRepository';
 import { IRole } from '../models/roleModel';
 import CustomError from '../utils/CustomError';
@@ -14,6 +15,22 @@ const createRole = async (payload: IRole) => {
 // Service to find a role by name
 const findRoleByName = async (name: string) => {
   const role = await roleRepository.findRoleByName(name);
+  if (!role) {
+    throw new CustomError('Role not found', 400);
+  }
+  return role;
+};
+
+const findRoleById = async (id: mongoose.Schema.Types.ObjectId) => {
+  const role = await roleRepository.findRoleById(id);
+  if (!role) {
+    throw new CustomError('Role not found', 400);
+  }
+  return role;
+};
+
+const findOnlyRoleNameById = async (id: mongoose.Schema.Types.ObjectId) => {
+  const role = await roleRepository.findOnlyRoleNameById(id);
   if (!role) {
     throw new CustomError('Role not found', 400);
   }
@@ -65,6 +82,8 @@ const assignPermissionsToModule = async (
 
 const roleService = {
   createRole,
+  findRoleById,
+  findOnlyRoleNameById,
   findRoleByName,
   findAll,
   updateRole,

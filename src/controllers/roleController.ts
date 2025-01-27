@@ -19,7 +19,7 @@ const findAll = catchAsync(async (req: Request, res: Response) => {
 
   res.status(201).json({
     success: true,
-    message: 'Role fetched successfully',
+    message: 'Roles fetched successfully',
     data: result,
   });
 });

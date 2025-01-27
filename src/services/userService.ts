@@ -1,10 +1,11 @@
 import crypto from 'crypto';
 import userRepository from '../dbAccess/userRepository';
-import UserType from '../types/userTypes';
+import { UserType, UpdateUserType } from '../types/userTypes';
 import emailService from './emailService';
 import { RegistrationEmailTemplate } from '../emails/RegistrationTemplates';
 import roleRepository from '../dbAccess/roleRepository';
 import CustomError from '../utils/CustomError';
+import mongoose from 'mongoose';
 
 const create = async (payload: UserType) => {
   const { email, name, password } = payload;
@@ -21,7 +22,7 @@ const create = async (payload: UserType) => {
     email,
     name,
     password,
-    role: role?.id,
+    roles: [role?.id],
     otp,
     otp_expiry: otpExpiry,
   };
@@ -44,7 +45,45 @@ const findUserByEmail = async (email: string) => {
   return result;
 };
 
+const findUserByEmailWithPassword = async (email: string) => {
+  const result = userRepository.findUserByEmailWithPassword(email);
+  return result;
+};
+
+const findAll = async (page: number, limit: number, search: string) => {
+  const result = userRepository.findAllUsers(page, limit, search);
+  return result;
+};
+
+const findById = async (user_id: string) => {
+  const result = userRepository.findById(user_id);
+  return result;
+};
+
+const updateById = async (user_id: string, payload: UpdateUserType) => {
+  const result = userRepository.updateById(user_id, payload);
+  return result;
+};
+
+const deleteMultipleByIds = async (
+  payload: mongoose.Schema.Types.ObjectId[]
+) => {
+  const result = userRepository.deleteMultipleByIds(payload);
+  return result;
+};
+
+const getUserAnalytics = async () => {
+  const result = userRepository.getUserAnalytics();
+  return result;
+};
+
 export default {
   create,
   findUserByEmail,
+  findUserByEmailWithPassword,
+  findAll,
+  findById,
+  updateById,
+  deleteMultipleByIds,
+  getUserAnalytics,
 };

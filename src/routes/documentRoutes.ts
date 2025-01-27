@@ -15,8 +15,8 @@ const router = Router();
 router.post(
   '/',
   authenticate,
-  authorize(['super-admin', 'editor']), // Add roles according to your needs
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin', 'editor']), // Add roles according to your needs
+  checkPermissions('document-management', 'create'),
   sanitize(createDocumentValidationSchema),
   documentController.create
 );
@@ -25,7 +25,7 @@ router.post(
 router.get(
   '/',
   authenticate,
-  authorize(['super-admin', 'editor', 'viewer']), // Add roles as needed
+  authorize(['system-admin', 'editor', 'viewer']), // Add roles as needed
   checkPermissions('document-management', 'read'),
   documentController.findAll
 );
@@ -34,7 +34,7 @@ router.get(
 router.get(
   '/:id',
   authenticate,
-  authorize(['super-admin', 'editor', 'viewer']),
+  authorize(['system-admin', 'editor', 'viewer']),
   checkPermissions('document-management', 'read'),
   documentController.findById
 );
@@ -43,7 +43,7 @@ router.get(
 router.get(
   '/parent/:parentId',
   authenticate,
-  authorize(['super-admin', 'editor']),
+  authorize(['system-admin', 'editor']),
   checkPermissions('document-management', 'read'),
   documentController.findByParentId
 );
@@ -52,8 +52,8 @@ router.get(
 router.put(
   '/:id',
   authenticate,
-  authorize(['super-admin', 'editor']),
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin', 'editor']),
+  checkPermissions('document-management', 'update'),
   sanitize(updateDocumentValidationSchema),
   documentController.updateById
 );
@@ -62,8 +62,8 @@ router.put(
 router.delete(
   '/:id',
   authenticate,
-  authorize(['super-admin']),
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin']),
+  checkPermissions('document-management', 'update'),
   documentController.deleteById
 );
 
@@ -71,8 +71,8 @@ router.delete(
 router.post(
   '/:id/version',
   authenticate,
-  authorize(['super-admin', 'editor']),
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin', 'editor']),
+  checkPermissions('document-management', 'update'),
   documentController.addVersion
 );
 
@@ -80,8 +80,8 @@ router.post(
 router.delete(
   '/:id/version/:versionId',
   authenticate,
-  authorize(['super-admin', 'editor']),
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin', 'editor']),
+  checkPermissions('document-management', 'delete'),
   documentController.removeVersion
 );
 
@@ -89,8 +89,8 @@ router.delete(
 router.put(
   '/:id/version/:versionId/current',
   authenticate,
-  authorize(['super-admin', 'editor']),
-  checkPermissions('document-management', 'write'),
+  authorize(['system-admin', 'editor']),
+  checkPermissions('document-management', 'update'),
   documentController.setCurrentVersion
 );
 

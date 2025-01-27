@@ -10,6 +10,7 @@ import CustomError from '../utils/CustomError';
 import emailService from '../services/emailService';
 import generateAccessToken from '../utils/generateAccessToken';
 import mongoose from 'mongoose';
+import roleService from '../services/roleService';
 
 const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -41,7 +42,7 @@ const login = catchAsync(
     const userAgent = req.headers['user-agent'] || '';
     const ip = req.ip || '';
 
-    const user: any = await userService.findUserByEmail(email);
+    const user: any = await userService.findUserByEmailWithPassword(email);
     if (!user) {
       return next(new CustomError('User not found.', 401));
     }
@@ -61,12 +62,19 @@ const login = catchAsync(
       return next(new CustomError('Invalid credentials', 401));
     }
 
-    const token = generateAccessToken(user._id, user.role);
+    const token = generateAccessToken(user._id, user.roles);
+
+    const roles = [];
+
+    for (const roleId of user.roles) {
+      const role = await roleService.findOnlyRoleNameById(roleId);
+      roles.push(role.name);
+    }
 
     const result = {
       id: user._id,
       email: user.email,
-      role: user.role.name,
+      roles,
       name: user.name,
     };
 

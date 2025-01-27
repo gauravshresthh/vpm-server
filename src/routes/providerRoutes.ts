@@ -11,8 +11,8 @@ const router = Router();
 router.post(
   '/',
   authenticate,
-  authorize(['super-admin']),
-  checkPermissions('college-management', 'write'),
+  authorize(['system-admin']),
+  checkPermissions('college-management', 'create'),
   sanitize(createProviderValidationSchema),
   providerController.create
 );
@@ -20,7 +20,7 @@ router.post(
 router.get(
   '/',
   authenticate,
-  authorize(['super-admin']),
+  authorize(['system-admin']),
   checkPermissions('college-management', 'read'),
   providerController.findAll
 );

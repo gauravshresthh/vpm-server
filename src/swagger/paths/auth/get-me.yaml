@@ -29,9 +29,9 @@
                       email:
                         type: string
                         example: gauravshrestha@mailinator.com
-                      role:
+                      roles:
                         type: string
-                        example: student
+                        example: ['student']
                       createdAt:
                         type: string
                         format: date-time
