@@ -11,7 +11,7 @@ export const createConversation = catchAsync(
     const conversation = await ConversationService.createConversation(
       userId,
       participants,
-      subject,
+      subject
     );
     res.status(201).json({ success: true, data: conversation });
   }

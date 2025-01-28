@@ -6,15 +6,19 @@ import { getIO } from '../socket';
 export const createConversation = async (
   user_id: string,
   participants: string[],
-  subject?: string,
+  subject?: string
 ) => {
-  const newParticipantsListWithCurrentUserPopulated = [...participants, user_id];
+  const newParticipantsListWithCurrentUserPopulated = [
+    ...participants,
+    user_id,
+  ];
   const uniqueParticipants = Array.from(
-    new Set(
-      newParticipantsListWithCurrentUserPopulated.filter(isValidObjectId)
-    )
+    new Set(newParticipantsListWithCurrentUserPopulated.filter(isValidObjectId))
   );
-  return await conversationRepository.createConversation(uniqueParticipants, subject);
+  return await conversationRepository.createConversation(
+    uniqueParticipants,
+    subject
+  );
 };
 
 export const getConversationsForUser = async (
@@ -33,12 +37,15 @@ export const addMessageToConversation = async (
     sender,
     content,
   });
-  await conversationRepository.addLastMessageToConversation(conversation_id, message.id)
+  await conversationRepository.addLastMessageToConversation(
+    conversation_id,
+    message.id
+  );
   await conversationRepository.updateUnreadCount(conversation_id, sender, 0);
 
   const io = getIO();
   io.to(conversation_id.toString()).emit('newMessage', {
-    conversation_id: conversation_id.toString(), 
+    conversation_id: conversation_id.toString(),
   });
   return message;
 };
