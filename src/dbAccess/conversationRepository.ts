@@ -21,7 +21,10 @@ const getConversationsForUser = async (
 ): Promise<IConversation[]> => {
   return await ConversationModel.find({ participants: userId }).populate(
     'last_message'
-  );
+  ).populate({
+    path: 'participants',
+    select: 'name photo email phone_number',
+  });
 };
 
 const updateUnreadCount = async (
@@ -34,11 +37,19 @@ const updateUnreadCount = async (
   });
 };
 
+const addLastMessageToConversation = async (
+  conversation_id: mongoose.Types.ObjectId,
+  last_message_id: string
+): Promise<IConversation | null> => {
+  return await ConversationModel.findByIdAndUpdate(conversation_id, {last_message: last_message_id}, { new: true });
+};
+
 const conversationRepository = {
   createConversation,
   getConversationById,
   getConversationsForUser,
   updateUnreadCount,
+  addLastMessageToConversation
 };
 
 export default conversationRepository;

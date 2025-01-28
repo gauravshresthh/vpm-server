@@ -9,10 +9,10 @@ export interface IConversation extends Document {
 
 const ConversationSchema: Schema<IConversation> = new mongoose.Schema(
   {
-    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // User IDs in conversation
-    subject: { type: String }, // Optional subject or title
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], 
+    subject: { type: String }, 
     last_message: { type: mongoose.Schema.Types.ObjectId, ref: 'Message' },
-    unread_count: { type: Map, of: Number }, // Map<UserID, UnreadCount>
+    unread_count: { type: Map, of: Number },
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );

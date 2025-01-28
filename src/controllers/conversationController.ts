@@ -6,9 +6,12 @@ import catchAsync from '../utils/catchAsync';
 export const createConversation = catchAsync(
   async (req: Request, res: Response) => {
     const { participants, subject } = req.body;
+    const user: any = req.user;
+    const userId = user.id;
     const conversation = await ConversationService.createConversation(
+      userId,
       participants,
-      subject
+      subject,
     );
     res.status(201).json({ success: true, data: conversation });
   }

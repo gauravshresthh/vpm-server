@@ -1,13 +1,20 @@
-import mongoose from 'mongoose';
+import mongoose, { isValidObjectId } from 'mongoose';
 import conversationRepository from '../dbAccess/conversationRepository';
 import messageRepository from '../dbAccess/messageRepository';
 import { getIO } from '../socket';
 
 export const createConversation = async (
+  user_id: string,
   participants: string[],
-  subject?: string
+  subject?: string,
 ) => {
-  return await conversationRepository.createConversation(participants, subject);
+  const newParticipantsListWithCurrentUserPopulated = [...participants, user_id];
+  const uniqueParticipants = Array.from(
+    new Set(
+      newParticipantsListWithCurrentUserPopulated.filter(isValidObjectId)
+    )
+  );
+  return await conversationRepository.createConversation(uniqueParticipants, subject);
 };
 
 export const getConversationsForUser = async (
@@ -26,14 +33,13 @@ export const addMessageToConversation = async (
     sender,
     content,
   });
+  await conversationRepository.addLastMessageToConversation(conversation_id, message.id)
   await conversationRepository.updateUnreadCount(conversation_id, sender, 0);
-  // Emit the new message to all participants
+
   const io = getIO();
   io.to(conversation_id.toString()).emit('newMessage', {
-    conversation_id: conversation_id.toString(), // Ensure it's a string
-    message,
+    conversation_id: conversation_id.toString(), 
   });
-  console.log('new message emitted');
   return message;
 };
 

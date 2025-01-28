@@ -44,7 +44,7 @@ const login = catchAsync(
 
     const user: any = await userService.findUserByEmailWithPassword(email);
     if (!user) {
-      return next(new CustomError('User not found.', 401));
+      return next(new CustomError('User not found.', 400));
     }
 
     if (!user.is_verified) {

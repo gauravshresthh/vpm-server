@@ -7,7 +7,7 @@ const seedRolesWithPermissions = async () => {
     {
       name: 'system-admin',
       permissions: {
-        'college-settings': ['create', 'read', 'update', 'delete'],
+        'college-management': ['create', 'read', 'update', 'delete'],
         'course-management': ['create', 'read', 'update', 'delete'],
         'student-management': ['create', 'read', 'update', 'delete'],
         'facility-management': ['create', 'read', 'update', 'delete'],
@@ -18,7 +18,7 @@ const seedRolesWithPermissions = async () => {
     {
       name: 'vpo',
       permissions: {
-        'college-settings': ['read', 'create'],
+        'college-management': ['read', 'create'],
         'course-management': ['read'],
         'student-management': ['read', 'create'],
         'facility-management': ['read', 'create'],
@@ -28,7 +28,7 @@ const seedRolesWithPermissions = async () => {
     {
       name: 'vp-provider',
       permissions: {
-        'college-settings': ['read', 'create'],
+        'college-management': ['read', 'create'],
         'course-management': ['read'],
         'student-management': ['read', 'create'],
         'facility-management': ['read', 'create'],
@@ -39,7 +39,7 @@ const seedRolesWithPermissions = async () => {
     {
       name: 'facilitator',
       permissions: {
-        'college-settings': ['read'],
+        'college-management': ['read'],
         'course-management': ['read'],
         'student-management': ['read', 'create'],
         'facility-management': ['read'],
@@ -50,7 +50,7 @@ const seedRolesWithPermissions = async () => {
     {
       name: 'trainer',
       permissions: {
-        'college-settings': ['read'],
+        'college-management': ['read'],
         'course-management': ['read', 'create'],
         'student-management': ['read', 'create'],
         'facility-management': ['read'],
@@ -61,7 +61,7 @@ const seedRolesWithPermissions = async () => {
     {
       name: 'student',
       permissions: {
-        'college-settings': ['read'],
+        'college-management': ['read'],
         'course-management': ['read'],
         'student-management': ['read'],
       },
