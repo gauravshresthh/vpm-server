@@ -1,5 +1,7 @@
 import Joi from 'joi';
 
+const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+
 const addressSchema = Joi.object({
   street_line1: Joi.string().required().messages({
     'string.base': 'Street Line 1 must be a string',
@@ -98,4 +100,74 @@ const createProviderValidationSchema = Joi.object({
   }),
 }).options({ allowUnknown: false });
 
-export { createProviderValidationSchema };
+
+const updateProviderValidationSchema = Joi.object({
+   provider_id: Joi.string().pattern(objectIdRegex).required().messages({
+      'string.base': 'provider_id must be a string',
+      'string.pattern.base': 'provider_id must be a valid MongoDB ObjectId',
+      'any.required': 'provider_id is required',
+    }),
+  name: Joi.string().required().messages({
+    'string.base': 'Provider Name must be a string',
+    'any.required': 'Provider Name is required',
+  }),
+  legal_name: Joi.string().required().messages({
+    'string.base': 'Legal Name must be a string',
+    'any.required': 'Legal Name is required',
+  }),
+  website: Joi.string().uri().optional().messages({
+    'string.base': 'Website must be a valid URL',
+    'string.uri': 'Invalid URL format',
+  }),
+  training_organization_type: Joi.string().optional().messages({
+    'string.base': 'Training Organization Type must be a string',
+  }),
+  rto_code: Joi.string().optional().messages({
+    'string.base': 'RTO Code must be a string',
+  }),
+  is_public_rto: Joi.boolean().optional().messages({
+    'boolean.base': 'Is Public RTO must be a boolean',
+  }),
+  cricos_code: Joi.string().optional().messages({
+    'string.base': 'CRICOS Code must be a string',
+  }),
+  abn: Joi.string().optional().messages({
+    'string.base': 'ABN must be a string',
+  }),
+  head_office_address: addressSchema.required().messages({
+    'any.required': 'Head Office Address is required',
+  }),
+  postal_same_as_office: Joi.boolean().optional().messages({
+    'boolean.base': 'Postal Same As Office must be a boolean',
+  }),
+  contact_person: contactPersonSchema.required().messages({
+    'any.required': 'Contact Person is required',
+  }),
+  campuses: Joi.array().items(campusSchema).optional().messages({
+    'array.base': 'Campuses must be an array of campus objects',
+  }),
+}).options({ allowUnknown: false });
+
+const getAllProviderValidationSchema = Joi.object({
+  page: Joi.number().integer().min(1).default(1),
+  limit: Joi.number().integer().min(1).max(100).default(10),
+  search: Joi.string().optional().default(''),
+}).options({ allowUnknown: false });
+
+const getProviderByIdValidationSchema = Joi.object({
+  provider_id: Joi.string().pattern(objectIdRegex).required().messages({
+    'string.base': 'provider_id must be a string',
+    'string.pattern.base': 'provider_id must be a valid MongoDB ObjectId',
+    'any.required': 'provider_id is required',
+  }),
+}).options({ allowUnknown: false });
+
+const deleteProviderByIdValidationSchema = Joi.object({
+  provider_id: Joi.string().pattern(objectIdRegex).required().messages({
+    'string.base': 'provider_id must be a string',
+    'string.pattern.base': 'provider_id must be a valid MongoDB ObjectId',
+    'any.required': 'provider_id is required',
+  }),
+}).options({ allowUnknown: false });
+
+export { createProviderValidationSchema , getAllProviderValidationSchema, updateProviderValidationSchema, getProviderByIdValidationSchema, deleteProviderByIdValidationSchema};

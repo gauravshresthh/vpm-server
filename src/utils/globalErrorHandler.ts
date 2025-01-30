@@ -73,7 +73,7 @@ const globalErrorHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  console.error('Error caught by global handler:', err);
+  // console.error('Error caught by global handler:', err);
   err.statusCode = err.statusCode || 500;
   err.isOperational = err.isOperational || false;
 

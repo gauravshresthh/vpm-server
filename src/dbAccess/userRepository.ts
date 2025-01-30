@@ -30,6 +30,7 @@ const findAllUsers = async (
     ? { name: { $regex: search, $options: 'i' } }
     : {};
 
+
   const totalCount = await User.countDocuments(searchFilter);
   const result = await User.find(searchFilter)
     .skip(skip)

@@ -15,8 +15,29 @@ const findProviderById = async (
 };
 
 // Find all providers
-const findAllProviders = async () => {
-  return await Provider.find();
+const findAllProviders = async (
+  page: number = 1,
+  limit: number = 10,
+  search: string = ''
+) => {
+  const skip = (page - 1) * limit;
+  
+  const searchFilter = search
+    ? { name: { $regex: search, $options: 'i' } }
+    : {};
+  console.log(searchFilter, search)
+  const totalCount = await Provider.countDocuments(searchFilter);
+  const result = await Provider.find(searchFilter)
+    .skip(skip)
+    .limit(limit)
+    .exec();
+
+  return {
+    totalCount,
+    totalPages: Math.ceil(totalCount / limit),
+    currentPage: page,
+    result,
+  };
 };
 
 // Update a provider by ID

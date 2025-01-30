@@ -8,8 +8,8 @@ const create = async (payload: IProvider) => {
 };
 
 // Service to find a provider by ID
-const findById = async (providerId: string) => {
-  const provider = await providerRepository.findProviderById(providerId);
+const findById = async (provider_id: string) => {
+  const provider = await providerRepository.findProviderById(provider_id);
   if (!provider) {
     throw new CustomError('Provider not found', 400);
   }
@@ -17,14 +17,14 @@ const findById = async (providerId: string) => {
 };
 
 // Service to get all providers
-const findAll = async () => {
-  return await providerRepository.findAllProviders();
+const findAll = async (page: number, limit: number, search: string) => {
+  return await providerRepository.findAllProviders(page, limit, search);
 };
 
 // Service to update provider details
-const updateById = async (providerId: string, payload: Partial<IProvider>) => {
+const updateById = async (provider_id: string, payload: Partial<IProvider>) => {
   const updatedProvider = await providerRepository.updateProvider(
-    providerId,
+    provider_id,
     payload
   );
   if (!updatedProvider) {
@@ -34,8 +34,8 @@ const updateById = async (providerId: string, payload: Partial<IProvider>) => {
 };
 
 // Service to delete a provider
-const deleteById = async (providerId: string) => {
-  const deletedProvider = await providerRepository.deleteProvider(providerId);
+const deleteById = async (provider_id: string) => {
+  const deletedProvider = await providerRepository.deleteProvider(provider_id);
   if (!deletedProvider) {
     throw new CustomError('Provider not found', 400);
   }
@@ -44,11 +44,11 @@ const deleteById = async (providerId: string) => {
 
 // Service to add a campus to a provider
 const addCampus = async (
-  providerId: string,
+  provider_id: string,
   campus: IProvider['campuses'][0]
 ) => {
   const updatedProvider = await providerRepository.addCampus(
-    providerId,
+    provider_id,
     campus
   );
   if (!updatedProvider) {
@@ -58,9 +58,9 @@ const addCampus = async (
 };
 
 // Service to remove a campus from a provider
-const removeCampus = async (providerId: string, campusId: string) => {
+const removeCampus = async (provider_id: string, campusId: string) => {
   const updatedProvider = await providerRepository.removeCampus(
-    providerId,
+    provider_id,
     campusId
   );
   if (!updatedProvider) {
