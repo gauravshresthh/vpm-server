@@ -1,0 +1,261 @@
+openapi: 3.0.0
+info:
+  title: Provider API
+  description: API for managing providers and their campuses
+  version: 1.0.0
+
+servers:
+  - url: /api/v1
+
+paths:
+  /api/v1/providers:
+    get:
+      summary: Get all providers
+      description: Fetches a list of all registered providers along with their details.
+      tags:
+        - Providers (Protected)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            example: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+            example: "Global Training"
+      responses:
+        '200':
+          description: Successfully fetched providers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Create a new provider
+      description: Adds a new provider to the system.
+      tags:
+        - Providers (Protected)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Provider'
+      responses:
+        '201':
+          description: Provider created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v1/providers/{provider_id}:
+    get:
+      summary: Get a provider by ID
+      description: Fetches the details of a specific provider.
+      tags:
+        - Providers (Protected)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: provider_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "67901186dd88744e5fcccdfa"
+      responses:
+        '200':
+          description: Successfully fetched provider
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Update a provider
+      description: Updates the details of a provider.
+      tags:
+        - Providers (Protected)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: provider_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Provider'
+      responses:
+        '200':
+          description: Provider updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete a provider
+      description: Removes a provider from the system.
+      tags:
+        - Providers (Protected)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: provider_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Provider deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    Unauthorized:
+      description: Unauthorized access - invalid token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden - insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request due to invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    Provider:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Global Training Institute"
+        legal_name:
+          type: string
+          example: "Global Training Institute Pty Ltd"
+        website:
+          type: string
+          example: "https://www.globaltraining.com"
+    ProviderListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Providers fetched successfully"
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Provider'
+    ProviderResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Provider fetched successfully"
+        data:
+          $ref: '#/components/schemas/Provider'
+    DeleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Provider deleted successfully"
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "An error occurred."

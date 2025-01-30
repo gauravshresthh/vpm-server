@@ -13,10 +13,10 @@
              properties:
                email:
                  type: string
-                 example: 'user@example.com'
+                 example: 'gauravshresthh@gmail.com'
                password:
                  type: string
-                 example: 'password123'
+                 example: 'Gaurav@12345'
              required:
                - email
                - password
@@ -48,7 +48,7 @@
                            example: 'user-id'
                          email:
                            type: string
-                           example: 'user@example.com'
+                           example: 'gauravshresthh@gmail.com'
                          roles:
                            type: string[]
                            example: ['student']

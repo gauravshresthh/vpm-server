@@ -25,7 +25,6 @@ const findAllProviders = async (
   const searchFilter = search
     ? { name: { $regex: search, $options: 'i' } }
     : {};
-  console.log(searchFilter, search);
   const totalCount = await Provider.countDocuments(searchFilter);
   const result = await Provider.find(searchFilter)
     .skip(skip)

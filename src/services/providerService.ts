@@ -11,7 +11,7 @@ const create = async (payload: IProvider) => {
 const findById = async (provider_id: string) => {
   const provider = await providerRepository.findProviderById(provider_id);
   if (!provider) {
-    throw new CustomError('Provider not found', 400);
+    throw new CustomError('Provider not found', 404);
   }
   return provider;
 };
@@ -28,7 +28,7 @@ const updateById = async (provider_id: string, payload: Partial<IProvider>) => {
     payload
   );
   if (!updatedProvider) {
-    throw new CustomError('Provider not found', 400);
+    throw new CustomError('Provider not found', 404);
   }
   return updatedProvider;
 };
@@ -37,7 +37,7 @@ const updateById = async (provider_id: string, payload: Partial<IProvider>) => {
 const deleteById = async (provider_id: string) => {
   const deletedProvider = await providerRepository.deleteProvider(provider_id);
   if (!deletedProvider) {
-    throw new CustomError('Provider not found', 400);
+    throw new CustomError('Provider not found', 404);
   }
   return deletedProvider;
 };
@@ -52,7 +52,7 @@ const addCampus = async (
     campus
   );
   if (!updatedProvider) {
-    throw new CustomError('Provider not found', 400);
+    throw new CustomError('Provider not found', 404);
   }
   return updatedProvider;
 };
@@ -64,7 +64,7 @@ const removeCampus = async (provider_id: string, campusId: string) => {
     campusId
   );
   if (!updatedProvider) {
-    throw new CustomError('Provider not found', 400);
+    throw new CustomError('Provider not found', 404);
   }
   return updatedProvider;
 };

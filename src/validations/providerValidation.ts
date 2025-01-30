@@ -106,13 +106,11 @@ const updateProviderValidationSchema = Joi.object({
     'string.pattern.base': 'provider_id must be a valid MongoDB ObjectId',
     'any.required': 'provider_id is required',
   }),
-  name: Joi.string().required().messages({
+  name: Joi.string().optional().messages({
     'string.base': 'Provider Name must be a string',
-    'any.required': 'Provider Name is required',
   }),
-  legal_name: Joi.string().required().messages({
+  legal_name: Joi.string().optional().messages({
     'string.base': 'Legal Name must be a string',
-    'any.required': 'Legal Name is required',
   }),
   website: Joi.string().uri().optional().messages({
     'string.base': 'Website must be a valid URL',
@@ -133,13 +131,13 @@ const updateProviderValidationSchema = Joi.object({
   abn: Joi.string().optional().messages({
     'string.base': 'ABN must be a string',
   }),
-  head_office_address: addressSchema.required().messages({
+  head_office_address: addressSchema.optional().messages({
     'any.required': 'Head Office Address is required',
   }),
   postal_same_as_office: Joi.boolean().optional().messages({
     'boolean.base': 'Postal Same As Office must be a boolean',
   }),
-  contact_person: contactPersonSchema.required().messages({
+  contact_person: contactPersonSchema.optional().messages({
     'any.required': 'Contact Person is required',
   }),
   campuses: Joi.array().items(campusSchema).optional().messages({
@@ -147,10 +145,11 @@ const updateProviderValidationSchema = Joi.object({
   }),
 }).options({ allowUnknown: false });
 
+
 const getAllProviderValidationSchema = Joi.object({
   page: Joi.number().integer().min(1).default(1),
   limit: Joi.number().integer().min(1).max(100).default(10),
-  search: Joi.string().optional().default(''),
+  search: Joi.string().trim().optional().default(''),
 }).options({ allowUnknown: false });
 
 const getProviderByIdValidationSchema = Joi.object({

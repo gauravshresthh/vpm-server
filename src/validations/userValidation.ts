@@ -5,7 +5,7 @@ const objectIdRegex = /^[0-9a-fA-F]{24}$/;
 const getAllUsersValidationSchema = Joi.object({
   page: Joi.number().integer().min(1).default(1),
   limit: Joi.number().integer().min(1).max(100).default(10),
-  search: Joi.string().optional().default(''),
+  search: Joi.string().trim().optional().default(''),
 }).options({ allowUnknown: false });
 
 const getUserByIdValidationSchema = Joi.object({
