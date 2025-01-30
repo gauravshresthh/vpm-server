@@ -16,7 +16,6 @@ const router = Router();
 router.get(
   '/',
   authenticate,
-  authenticate,
   authorize(['system-admin']),
   sanitize(getAllUsersValidationSchema),
   userController.findAll
@@ -24,7 +23,6 @@ router.get(
 
 router.get(
   '/user/:user_id',
-  authenticate,
   authenticate,
   authorize(['system-admin']),
   sanitize(getUserByIdValidationSchema),
@@ -34,7 +32,6 @@ router.get(
 router.put(
   '/user/:user_id',
   authenticate,
-  authenticate,
   authorize(['system-admin']),
   sanitize(updateUserByIdValidationSchema),
   userController.updateById
@@ -43,7 +40,6 @@ router.put(
 router.delete(
   '/',
   authenticate,
-  authenticate,
   authorize(['system-admin']),
   sanitize(deleteMultipleUserByIdsSchema),
   userController.deleteMultipleByIds
@@ -51,7 +47,6 @@ router.delete(
 
 router.get(
   '/dashboard',
-  authenticate,
   authenticate,
   authorize(['system-admin']),
   sanitize(getAnalyticsSchema),

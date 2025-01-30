@@ -1,0 +1,258 @@
+paths:
+  /api/v1/users:
+    
+    get:
+      summary: Get a list of users
+      description: Fetch a list of users with pagination and search options.
+      tags:
+        - Users (Protected)
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination (default is 1)
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Number of users per page (default is 10, max 100)
+          required: false
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+        - name: search
+          in: query
+          description: Search term for user name
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      result:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      tags:
+        - Users (Protected)
+      description: Register a new user in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserType'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  
+  /api/v1/users/{user_id}:
+    
+    get:
+      tags:
+        - Users (Protected)
+      summary: Get a user by ID
+      description: Fetch a specific user's profile by their ID.
+      parameters:
+        - name: user_id
+          in: path
+          description: The user ID to fetch the user profile
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'  # MongoDB ObjectId pattern
+      responses:
+        '200':
+          description: User profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+
+    put:
+      tags:
+        - Users (Protected)
+      summary: Update a user by ID
+      description: Update the details of a specific user by their ID.
+      parameters:
+        - name: user_id
+          in: path
+          description: The user ID to update
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserType'
+      responses:
+        '200':
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags:
+        - Users (Protected)
+      summary: Delete a user by ID
+      description: Delete a specific user by their ID.
+      parameters:
+        - name: user_id
+          in: path
+          description: The user ID to delete
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+      responses:
+        '200':
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      deletedCount:
+                        type: integer
+
+  /api/v1/users/analytics:
+    get:
+      summary: Get user analytics
+      description: Fetch user analytics including the total count and role-based distribution.
+      tags:
+        - Users (Protected)
+      responses:
+        '200':
+          description: User analytics fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      all_users:
+                        type: integer
+                      role_wise_counts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            count:
+                              type: integer
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The user's MongoDB ObjectId
+        name:
+          type: string
+          description: The user's name
+        email:
+          type: string
+          description: The user's email address
+        photo:
+          type: string
+          description: URL to the user's photo
+        phone_number:
+          type: string
+          description: The user's phone number
+        roles:
+          type: array
+          items:
+            type: string
+          description: List of roles associated with the user
+        active:
+          type: boolean
+          description: Whether the user's account is active
+    UserType:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The user's name
+        email:
+          type: string
+          description: The user's email address
+        password:
+          type: string
+          description: The user's password
+    UpdateUserType:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The user's name
+        email:
+          type: string
+          description: The user's email address
+        photo:
+          type: string
+          description: URL to the user's photo
+        phone_number:
+          type: string
+          description: The user's phone number
+        roles:
+          type: array
+          items:
+            type: string
+          description: List of roles to associate with the user
+        active:
+          type: boolean
+          description: Whether the user's account is active
