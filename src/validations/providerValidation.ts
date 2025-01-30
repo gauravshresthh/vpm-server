@@ -100,13 +100,12 @@ const createProviderValidationSchema = Joi.object({
   }),
 }).options({ allowUnknown: false });
 
-
 const updateProviderValidationSchema = Joi.object({
-   provider_id: Joi.string().pattern(objectIdRegex).required().messages({
-      'string.base': 'provider_id must be a string',
-      'string.pattern.base': 'provider_id must be a valid MongoDB ObjectId',
-      'any.required': 'provider_id is required',
-    }),
+  provider_id: Joi.string().pattern(objectIdRegex).required().messages({
+    'string.base': 'provider_id must be a string',
+    'string.pattern.base': 'provider_id must be a valid MongoDB ObjectId',
+    'any.required': 'provider_id is required',
+  }),
   name: Joi.string().required().messages({
     'string.base': 'Provider Name must be a string',
     'any.required': 'Provider Name is required',
@@ -170,4 +169,10 @@ const deleteProviderByIdValidationSchema = Joi.object({
   }),
 }).options({ allowUnknown: false });
 
-export { createProviderValidationSchema , getAllProviderValidationSchema, updateProviderValidationSchema, getProviderByIdValidationSchema, deleteProviderByIdValidationSchema};
+export {
+  createProviderValidationSchema,
+  getAllProviderValidationSchema,
+  updateProviderValidationSchema,
+  getProviderByIdValidationSchema,
+  deleteProviderByIdValidationSchema,
+};

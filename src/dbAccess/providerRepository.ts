@@ -21,11 +21,11 @@ const findAllProviders = async (
   search: string = ''
 ) => {
   const skip = (page - 1) * limit;
-  
+
   const searchFilter = search
     ? { name: { $regex: search, $options: 'i' } }
     : {};
-  console.log(searchFilter, search)
+  console.log(searchFilter, search);
   const totalCount = await Provider.countDocuments(searchFilter);
   const result = await Provider.find(searchFilter)
     .skip(skip)
