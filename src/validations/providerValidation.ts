@@ -51,11 +51,10 @@ const contactPersonSchema = Joi.object({
 });
 
 const campusSchema = Joi.object({
-  name: Joi.string().required().messages({
-    'string.base': 'Campus Name must be a string',
+  name: Joi.string().optional().messages({
     'any.required': 'Campus Name is required',
   }),
-  address: addressSchema.required(),
+  address: addressSchema.optional(),
 });
 
 const createProviderValidationSchema = Joi.object({
