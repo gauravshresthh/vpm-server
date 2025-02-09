@@ -64,6 +64,9 @@ const updateMeValidationSchema = Joi.object({
   photo: Joi.string().optional().messages({
     'string.base': 'Photo must be a string',
   }),
+  phone_number: Joi.string().optional().messages({
+    'string.base': 'Phone number must be a string',
+  }),
 }).options({ allowUnknown: false });
 
 export {

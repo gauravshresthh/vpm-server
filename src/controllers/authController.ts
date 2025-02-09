@@ -202,7 +202,7 @@ const updateMe = catchAsync(async (req, res, next) => {
     return newObj;
   };
 
-  const filteredBody = filterObj(req.body, 'name', 'photo');
+  const filteredBody = filterObj(req.body, 'name', 'photo', 'phone_number');
 
   const result = await User.findByIdAndUpdate(user.id, filteredBody, {
     new: true,
