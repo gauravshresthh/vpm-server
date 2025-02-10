@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
 import mongoSanitize from 'express-mongo-sanitize';
@@ -27,6 +27,7 @@ import { config } from './config/config';
 import CustomError from './utils/CustomError';
 import globalErrorHandler from './utils/globalErrorHandler';
 import { swaggerDocs } from './swagger/swagger';
+import { logger, requestLogger } from './utils/logger';
 
 const app = express();
 
@@ -34,6 +35,8 @@ app.use(compression());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({ limit: '10kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(requestLogger);
 
 if (process.env.NODE_ENV == 'development') {
   app.use(morgan('dev'));
@@ -90,11 +93,15 @@ app.use('/api/v1/messages', messageRoutes);
 app.use('/api/v1/assignments', assignmentRoutes);
 
 app.all('*', (req, res, next) => {
+  logger.warn(`Route not found: ${req.originalUrl}`, { ip: req.ip, method: req.method });
   return next(
     new CustomError(`Cant find ${req.originalUrl} on this server.`, 404)
   );
 });
 
-app.use(globalErrorHandler);
+app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
+  logger.error(`Error: ${err.message}`, { stack: err.stack, statusCode: err.statusCode });
+  globalErrorHandler(err, req, res, next);
+});
 
 export default app;
