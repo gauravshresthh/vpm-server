@@ -31,6 +31,7 @@ import { logger, requestLogger } from './utils/logger';
 
 const app = express();
 
+app.set('trust proxy', 1);
 app.use(compression());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({ limit: '10kb' }));
