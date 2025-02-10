@@ -93,14 +93,20 @@ app.use('/api/v1/messages', messageRoutes);
 app.use('/api/v1/assignments', assignmentRoutes);
 
 app.all('*', (req, res, next) => {
-  logger.warn(`Route not found: ${req.originalUrl}`, { ip: req.ip, method: req.method });
+  logger.warn(`Route not found: ${req.originalUrl}`, {
+    ip: req.ip,
+    method: req.method,
+  });
   return next(
     new CustomError(`Cant find ${req.originalUrl} on this server.`, 404)
   );
 });
 
 app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
-  logger.error(`Error: ${err.message}`, { stack: err.stack, statusCode: err.statusCode });
+  logger.error(`Error: ${err.message}`, {
+    stack: err.stack,
+    statusCode: err.statusCode,
+  });
   globalErrorHandler(err, req, res, next);
 });
 
