@@ -40,12 +40,13 @@ app.use(requestLogger);
 
 if (process.env.NODE_ENV == 'development') {
   app.use(morgan('dev'));
-  app.use(
-    '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerDocs, { explorer: true })
-  );
 }
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocs, { explorer: true })
+);
 
 app.use(mongoSanitize());
 app.use(helmet());
