@@ -9,7 +9,7 @@ const createConversation = async (
 };
 
 const getConversationById = async (
-  id: string
+  id: mongoose.Types.ObjectId
 ): Promise<IConversation | null> => {
   return await ConversationModel.findById(id).populate(
     'participants last_message'

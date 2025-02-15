@@ -36,6 +36,11 @@ const addMessageValidationSchema = Joi.object({
     'string.base': 'Message content must be a string',
     'any.required': 'Message content is required',
   }),
+  reply_to: Joi.string().pattern(objectIdRegex).optional().messages({
+    'string.base': 'Reply To must be a string',
+    'string.pattern.base': 'Reply To must be a valid MongoDB ObjectId',
+    'any.required': 'Reply To is required',
+  }),
 });
 
 // Validation for assigning a conversation

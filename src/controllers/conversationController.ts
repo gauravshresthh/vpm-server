@@ -28,13 +28,14 @@ export const getConversations = catchAsync(
 );
 
 export const addMessage = catchAsync(async (req: Request, res: Response) => {
-  const { conversation_id, content } = req.body;
+  const { conversation_id, content, reply_to } = req.body;
   const user: any = req.user;
   const sender = user.id;
   const message = await ConversationService.addMessageToConversation(
     conversation_id,
     sender,
-    content
+    content,
+    reply_to
   );
   res.status(201).json({ success: true, data: message });
 });
