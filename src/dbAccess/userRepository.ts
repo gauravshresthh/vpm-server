@@ -27,7 +27,12 @@ const findAllUsers = async (
   const skip = (page - 1) * limit;
 
   const searchFilter = search
-    ? { name: { $regex: search, $options: 'i' } }
+    ? {
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } }
+        ],
+      }
     : {};
 
   const totalCount = await User.countDocuments(searchFilter);
