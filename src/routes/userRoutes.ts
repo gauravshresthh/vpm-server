@@ -16,7 +16,7 @@ const router = Router();
 router.get(
   '/',
   authenticate,
-  authorize(['system-admin']),
+  // authorize(['system-admin']),
   sanitize(getAllUsersValidationSchema),
   userController.findAll
 );
