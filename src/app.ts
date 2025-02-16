@@ -29,6 +29,10 @@ import CustomError from './utils/CustomError';
 import globalErrorHandler from './utils/globalErrorHandler';
 import { swaggerDocs } from './swagger/swagger';
 import { logger, requestLogger } from './utils/logger';
+import userAgentBlock from './middlewares/userAgentBlock';
+import attackDetection from './middlewares/attackDetection';
+import forbiddenPathsMiddleware from './middlewares/forbiddenPaths';
+import rateLimiter from './middlewares/rateLimiter';
 
 const app = express();
 
@@ -59,6 +63,12 @@ const limiter = rateLimit({
   max: 500,
   message: `Too many requests from this IP , please try again in a hour`,
 });
+
+// Apply middlewares
+app.use(userAgentBlock);
+app.use(attackDetection);
+app.use(forbiddenPathsMiddleware);
+app.use(rateLimiter);
 
 app.use(
   session({
