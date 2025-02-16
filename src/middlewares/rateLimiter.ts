@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
 const failedAttempts = new Map<string, number[]>();
 
 const rateLimiter = (req: Request, res: Response, next: NextFunction): void => {
-  const ip = req.ip ?? "unknown-ip";
+  const ip = req.ip ?? 'unknown-ip';
   const now = Date.now();
 
   if (!failedAttempts.has(ip)) {
@@ -18,7 +18,7 @@ const rateLimiter = (req: Request, res: Response, next: NextFunction): void => {
   }
 
   if (attempts.length > 10) {
-    res.status(429).send("Too many requests. Try again later.");
+    res.status(429).send('Too many requests. Try again later.');
     return;
   }
 
