@@ -24,7 +24,8 @@ const getConversationsForUser = async (
     .populate({
       path: 'participants',
       select: 'name photo email phone_number',
-    });
+    })
+    .sort({ updated_at: -1 });
 };
 
 const updateUnreadCount = async (
