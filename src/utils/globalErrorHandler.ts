@@ -35,7 +35,10 @@ const handleMulterError = (): CustomError =>
   );
 
 const handleMongoDuplicateKeyError = (err: any): CustomError => {
-  const value = err.keyValue.name;
+  // const value = err.keyValue.name;
+  const match = err.errmsg?.match(/(["'])(\\?.)*?\1/);
+  const value = match ? match[0] : 'unknown value';
+
   const message = `{${value}} already exists. Please use another value.`;
   return new CustomError(message, 400);
 };

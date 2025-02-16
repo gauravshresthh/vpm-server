@@ -20,6 +20,7 @@ import documentCategoryRoutes from './routes/documentCategoryRoutes';
 import conversationRoutes from './routes/conversationRoutes';
 import messageRoutes from './routes/messageRoutes';
 import assignmentRoutes from './routes/assignmentRoutes';
+import invitationRoutes from './routes/invitationRoutes';
 
 import swaggerUi from 'swagger-ui-express';
 
@@ -93,6 +94,7 @@ app.use('/api/v1/document-categories', documentCategoryRoutes);
 app.use('/api/v1/conversations', conversationRoutes);
 app.use('/api/v1/messages', messageRoutes);
 app.use('/api/v1/assignments', assignmentRoutes);
+app.use('/api/v1/invitations', invitationRoutes);
 
 app.all('*', (req, res, next) => {
   logger.warn(`Route not found: ${req.originalUrl}`, {
