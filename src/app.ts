@@ -32,7 +32,7 @@ import { logger, requestLogger } from './utils/logger';
 import userAgentBlock from './middlewares/userAgentBlock';
 import attackDetection from './middlewares/attackDetection';
 import forbiddenPathsMiddleware from './middlewares/forbiddenPaths';
-import rateLimiter from './middlewares/rateLimiter';
+// import rateLimiter from './middlewares/rateLimiter';
 
 const app = express();
 
@@ -68,7 +68,7 @@ const limiter = rateLimit({
 app.use(userAgentBlock);
 app.use(attackDetection);
 app.use(forbiddenPathsMiddleware);
-app.use(rateLimiter);
+// app.use(rateLimiter);
 
 app.use(
   session({
