@@ -17,7 +17,7 @@ import roleService from '../services/roleService';
 const findAll = catchAsync(async (req: Request, res: Response) => {
   const result = await roleService.findAll();
 
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     message: 'Roles fetched successfully',
     data: result,
