@@ -40,7 +40,7 @@ export const invite = async (payload: {
   };
   const result = await invitationRepository.createInvitation(data);
 
-  const inviteLink = `${process.env.FRONTEND_URL}/accept-invite?token=${token}`;
+  const inviteLink = `${process.env.FRONTEND_URL}/auth/accept-invite?token=${token}`;
   const emailPayload = {
     email,
     subject: 'You are invited to become a member of VPMS',
