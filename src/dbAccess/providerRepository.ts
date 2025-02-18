@@ -29,6 +29,7 @@ const findAllProviders = async (
   const result = await Provider.find(searchFilter)
     .skip(skip)
     .limit(limit)
+    .sort({ updated_at: -1 })
     .exec();
 
   return {
