@@ -51,10 +51,16 @@ const contactPersonSchema = Joi.object({
 });
 
 const campusSchema = Joi.object({
+  _id: Joi.string().pattern(objectIdRegex).optional().messages({
+    'string.base': '_id must be a string',
+    'string.pattern.base': '_id must be a valid MongoDB ObjectId',
+  }),
   name: Joi.string().optional().messages({
     'any.required': 'Campus Name is required',
   }),
   address: addressSchema.optional(),
+  created_at: Joi.string().optional(),
+  updated_at: Joi.string().optional(),
 });
 
 const createProviderValidationSchema = Joi.object({
@@ -142,6 +148,8 @@ const updateProviderValidationSchema = Joi.object({
   campuses: Joi.array().items(campusSchema).optional().messages({
     'array.base': 'Campuses must be an array of campus objects',
   }),
+  created_at: Joi.string().optional(),
+  updated_at: Joi.string().optional(),
 }).options({ allowUnknown: false });
 
 const getAllProviderValidationSchema = Joi.object({
