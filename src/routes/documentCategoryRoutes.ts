@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/authenticate';
 import { authorize } from '../middlewares/authorize';
-import checkPermissions from '../middlewares/checkPermissions';
+// import checkPermissions from '../middlewares/checkPermissions';
 import {
   createDocumentCategoryValidationSchema,
   updateDocumentCategoryValidationSchema,
@@ -16,7 +16,7 @@ router.post(
   '/',
   authenticate,
   authorize(['system-admin', 'editor']),
-  checkPermissions('document-management', 'create'),
+  // checkPermissions('document-management', 'create'),
   sanitize(createDocumentCategoryValidationSchema),
   documentCategoryController.create
 );
@@ -26,7 +26,7 @@ router.get(
   '/',
   authenticate,
   authorize(['system-admin', 'editor', 'viewer']),
-  checkPermissions('document-management', 'read'),
+  // checkPermissions('document-management', 'read'),
   documentCategoryController.findAll
 );
 
@@ -35,7 +35,7 @@ router.get(
   '/:id',
   authenticate,
   authorize(['system-admin', 'editor', 'viewer']),
-  checkPermissions('document-management', 'read'),
+  // checkPermissions('document-management', 'read'),
   documentCategoryController.findById
 );
 
@@ -44,7 +44,7 @@ router.put(
   '/:id',
   authenticate,
   authorize(['system-admin', 'editor']),
-  checkPermissions('document-management', 'update'),
+  // checkPermissions('document-management', 'update'),
   sanitize(updateDocumentCategoryValidationSchema),
   documentCategoryController.updateById
 );
@@ -54,7 +54,7 @@ router.delete(
   '/:id',
   authenticate,
   authorize(['system-admin']),
-  checkPermissions('document-management', 'delete'),
+  // checkPermissions('document-management', 'delete'),
   documentCategoryController.deleteById
 );
 
