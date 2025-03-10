@@ -61,7 +61,7 @@ app.use(cors());
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
   max: 500,
-  message: `Too many requests from this IP , please try again in a hour`,
+  message: `Too many requests from this IP , please try again in a hour.`,
 });
 
 // Apply middlewares
