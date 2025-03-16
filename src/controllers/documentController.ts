@@ -46,7 +46,6 @@ const createMany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user: any = req.user;
     const documents = req.body.documents;
-
     if (!Array.isArray(documents)) {
       return next(
         new CustomError('Invalid input, documents should be an array', 403)

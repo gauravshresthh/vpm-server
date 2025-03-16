@@ -57,11 +57,15 @@ const createDocumentValidationSchema = Joi.object({
     'string.pattern.base': 'parent_id must be a valid MongoDB ObjectId',
     'any.required': 'parent_id is required',
   }),
-  category: Joi.string().pattern(objectIdRegex).optional().messages({
-    'string.base': 'category must be a string',
-    'string.pattern.base': 'category must be a valid MongoDB ObjectId',
-    'any.required': 'category is required',
-  }),
+  category_id: Joi.string()
+    .pattern(objectIdRegex)
+    .optional()
+    .allow(null)
+    .messages({
+      'string.base': 'category_id must be a string',
+      'string.pattern.base': 'category_id must be a valid MongoDB ObjectId',
+      'any.required': 'category_id is required',
+    }),
   is_folder: Joi.boolean().default(false).optional().messages({
     'boolean.base': 'Is Folder must be a boolean',
   }),

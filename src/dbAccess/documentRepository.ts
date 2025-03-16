@@ -47,6 +47,7 @@ const findAllDocuments = async (
     .skip(skip)
     .limit(limit)
     .sort({ updated_at: -1 })
+    .populate('category_id')
     .exec();
 
   return {
