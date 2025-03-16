@@ -90,7 +90,6 @@ const findMyDocuments = async (userId: string) => {
   return await documentRepository.findMyDocuments(userId);
 };
 
-
 const documentService = {
   create,
   findById,
@@ -101,7 +100,7 @@ const documentService = {
   addVersion,
   removeVersion,
   setCurrentVersion,
-  findMyDocuments
+  findMyDocuments,
 };
 
 export default documentService;

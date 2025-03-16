@@ -26,7 +26,10 @@ const findDocumentById = async (
 const findAllDocuments = async () => {
   const documents = await DocumentModel.find();
   // Populate only the documents that have a non-null category
-  await DocumentModel.populate(documents, { path: 'category', match: { $ne: null } });
+  await DocumentModel.populate(documents, {
+    path: 'category',
+    match: { $ne: null },
+  });
   return documents;
 };
 
@@ -102,7 +105,7 @@ const documentRepository = {
   addVersion,
   removeVersion,
   setCurrentVersion,
-  findMyDocuments
+  findMyDocuments,
 };
 
 export default documentRepository;

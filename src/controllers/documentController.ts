@@ -63,7 +63,6 @@ const findMyDocuments = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 const findById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
@@ -178,5 +177,5 @@ export default {
   addVersion,
   removeVersion,
   setCurrentVersion,
-  findMyDocuments
+  findMyDocuments,
 };
