@@ -58,7 +58,12 @@ app.use(
 
 app.use(mongoSanitize());
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: '*',
+    credentials: true,
+  })
+);
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,

@@ -42,8 +42,36 @@ const create = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const createMany = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user: any = req.user;
+    const documents = req.body.documents;
+
+    if (!Array.isArray(documents)) {
+      return next(
+        new CustomError('Invalid input, documents should be an array', 403)
+      );
+    }
+    const payload = documents.map((doc) => ({
+      ...doc,
+      uploaded_by: user?._id,
+    }));
+
+    const result = await documentService.createMany(payload);
+
+    res.status(201).json({
+      success: true,
+      message: 'Documents created successfully',
+      data: result,
+    });
+  }
+);
+
 const findAll = catchAsync(async (req: Request, res: Response) => {
-  const result = await documentService.findAll();
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const search = typeof req.query.search === 'string' ? req.query.search : '';
+  const result = await documentService.findAll(page, limit, search);
 
   res.status(200).json({
     success: true,
@@ -178,4 +206,5 @@ export default {
   removeVersion,
   setCurrentVersion,
   findMyDocuments,
+  createMany,
 };

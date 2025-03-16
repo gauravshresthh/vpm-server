@@ -25,7 +25,7 @@ router.post(
 router.get(
   '/',
   authenticate,
-  authorize(['system-admin', 'editor', 'viewer']),
+  // authorize(['system-admin', 'editor', 'viewer']),
   // checkPermissions('document-management', 'read'),
   documentCategoryController.findAll
 );
@@ -34,7 +34,7 @@ router.get(
 router.get(
   '/:id',
   authenticate,
-  authorize(['system-admin', 'editor', 'viewer']),
+  // authorize(['system-admin', 'editor', 'viewer']),
   // checkPermissions('document-management', 'read'),
   documentCategoryController.findById
 );

@@ -8,6 +8,10 @@ const createDocument = async (payload: IDocument) => {
   return await document.save();
 };
 
+const createManyDocuments = async (payload: IDocument[]) => {
+  return await DocumentModel.insertMany(payload);
+};
+
 // Find a document by ID
 const findDocumentById = async (
   documentId: mongoose.Types.ObjectId | string
@@ -23,14 +27,34 @@ const findDocumentById = async (
 };
 
 // Find all documents
-const findAllDocuments = async () => {
-  const documents = await DocumentModel.find();
-  // Populate only the documents that have a non-null category
-  await DocumentModel.populate(documents, {
-    path: 'category',
-    match: { $ne: null },
-  });
-  return documents;
+const findAllDocuments = async (
+  page: number = 1,
+  limit: number = 10,
+  search: string = ''
+) => {
+  const skip = (page - 1) * limit;
+
+  const searchFilter = search
+    ? {
+        $or: [
+          { filename: { $regex: search, $options: 'i' } },
+          { name: { $regex: search, $options: 'i' } },
+        ],
+      }
+    : {};
+  const totalCount = await DocumentModel.countDocuments(searchFilter);
+  const result = await DocumentModel.find(searchFilter)
+    .skip(skip)
+    .limit(limit)
+    .sort({ updated_at: -1 })
+    .exec();
+
+  return {
+    totalCount,
+    totalPages: Math.ceil(totalCount / limit),
+    currentPage: page,
+    result,
+  };
 };
 
 const findMyDocuments = async (userId: string) => {
@@ -106,6 +130,7 @@ const documentRepository = {
   removeVersion,
   setCurrentVersion,
   findMyDocuments,
+  createManyDocuments,
 };
 
 export default documentRepository;

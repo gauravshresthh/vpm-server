@@ -19,7 +19,7 @@ router.get(
   authenticate,
   authorize(['system-admin']),
   sanitize(getAllProviderValidationSchema),
-  checkPermissions('college-management', 'read'),
+  // checkPermissions('college-management', 'read'),
   providerController.findAll
 );
 

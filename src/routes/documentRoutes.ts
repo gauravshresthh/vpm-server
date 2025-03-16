@@ -6,6 +6,8 @@ import checkPermissions from '../middlewares/checkPermissions';
 import documentController from '../controllers/documentController';
 import {
   createDocumentValidationSchema,
+  createManyDocumentsValidationSchema,
+  getAllDocumentsValidationSchema,
   updateDocumentValidationSchema,
 } from '../validations/documentValidation';
 
@@ -21,11 +23,21 @@ router.post(
   documentController.create
 );
 
+router.post(
+  '/bulk-create',
+  authenticate,
+  // authorize(['system-admin', 'editor']), // Add roles according to your needs
+  // checkPermissions('document-management', 'create'),
+  sanitize(createManyDocumentsValidationSchema),
+  documentController.createMany
+);
+
 // Get all documents
 router.get(
   '/',
   authenticate,
-  // authorize(['system-admin', 'editor', 'viewer']), // Add roles as needed
+  authorize(['system-admin']),
+  sanitize(getAllDocumentsValidationSchema),
   // checkPermissions('document-management', 'read'),
   documentController.findAll
 );

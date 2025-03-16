@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 export interface IVersion {
+  name: string;
   filename: string;
   uploaded_by: string;
   upload_date: Date;
@@ -11,6 +12,7 @@ export interface IVersion {
 
 export interface IDocument extends Document {
   _id: mongoose.Types.ObjectId;
+  name: string;
   filename: string;
   file_type: string;
   parent_id?: mongoose.Types.ObjectId | null;
@@ -59,13 +61,27 @@ const version_schema: Schema<IVersion> = new Schema<IVersion>(
 
 const document_schema: Schema<IDocument> = new Schema<IDocument>(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     filename: {
       type: String,
       required: true,
     },
     file_type: {
       type: String,
-      enum: ['pdf', 'csv', 'doc', 'docx', 'image', 'other'],
+      enum: [
+        'pdf',
+        'csv',
+        'doc',
+        'docx',
+        'image',
+        'other',
+        'png',
+        'jpeg',
+        'jpg',
+      ],
       default: null,
     },
     url: {

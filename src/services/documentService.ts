@@ -7,6 +7,10 @@ const create = async (payload: IDocument) => {
   return await documentRepository.createDocument(payload);
 };
 
+const createMany = async (documents: IDocument[]) => {
+  return await documentRepository.createManyDocuments(documents);
+};
+
 // Service to find a document by ID
 const findById = async (documentId: string) => {
   const document = await documentRepository.findDocumentById(documentId);
@@ -17,8 +21,8 @@ const findById = async (documentId: string) => {
 };
 
 // Service to get all documents
-const findAll = async () => {
-  return await documentRepository.findAllDocuments();
+const findAll = async (page: number, limit: number, search: string) => {
+  return await documentRepository.findAllDocuments(page, limit, search);
 };
 
 // Service to get documents by parent ID (for folder contents)
@@ -101,6 +105,7 @@ const documentService = {
   removeVersion,
   setCurrentVersion,
   findMyDocuments,
+  createMany,
 };
 
 export default documentService;

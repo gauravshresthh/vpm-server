@@ -25,12 +25,16 @@ const versionSchema = Joi.object({
 
 // Main validation schema for creating a document
 const createDocumentValidationSchema = Joi.object({
+  name: Joi.string().required().messages({
+    'string.base': 'Name must be a string',
+    'any.required': 'Name is required',
+  }),
   filename: Joi.string().required().messages({
     'string.base': 'Filename must be a string',
     'any.required': 'Filename is required',
   }),
   file_type: Joi.string()
-    .valid('pdf', 'csv', 'doc', 'docx', 'image', 'other')
+    .valid('pdf', 'csv', 'doc', 'docx', 'image', 'other', 'png', 'jpeg', 'jpg')
     .optional()
     .messages({
       'string.base': 'File Type must be a string',
@@ -86,12 +90,27 @@ const createDocumentValidationSchema = Joi.object({
   }),
 }).options({ allowUnknown: false });
 
+const createManyDocumentsValidationSchema = Joi.object({
+  documents: Joi.array()
+    .items(createDocumentValidationSchema)
+    .min(1)
+    .required()
+    .messages({
+      'array.base': 'Documents must be an array',
+      'array.min': 'Documents array must contain at least one document',
+      'any.required': 'Documents array is required',
+    }),
+}).options({ allowUnknown: false });
+
 // Validation schema for updating a document
 const updateDocumentValidationSchema = Joi.object({
   id: Joi.string().pattern(objectIdRegex).required().messages({
     'string.base': 'id must be a string',
     'string.pattern.base': 'id must be a valid MongoDB ObjectId',
     'any.required': 'id is required',
+  }),
+  name: Joi.string().optional().messages({
+    'string.base': 'Name must be a string',
   }),
   filename: Joi.string().optional().messages({
     'string.base': 'Filename must be a string',
@@ -147,4 +166,15 @@ const updateDocumentValidationSchema = Joi.object({
   }),
 }).options({ allowUnknown: false });
 
-export { createDocumentValidationSchema, updateDocumentValidationSchema };
+const getAllDocumentsValidationSchema = Joi.object({
+  page: Joi.number().integer().min(1).default(1),
+  limit: Joi.number().integer().min(1).max(100).default(10),
+  search: Joi.string().trim().optional().default(''),
+}).options({ allowUnknown: false });
+
+export {
+  createDocumentValidationSchema,
+  updateDocumentValidationSchema,
+  createManyDocumentsValidationSchema,
+  getAllDocumentsValidationSchema,
+};

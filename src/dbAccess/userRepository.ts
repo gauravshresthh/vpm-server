@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { User } from '../models/userModel';
 import { UserType, UpdateUserType } from '../types/userTypes';
 import roleRepository from './roleRepository';
+import { DocumentModel } from '../models/documentModel';
 
 // Create a new user
 const createUser = async (payload: UserType) => {
@@ -88,6 +89,32 @@ const deleteMultipleByIds = async (
 
 const getUserAnalytics = async () => {
   const all_users = await User.countDocuments();
+  const totalDocuments = await DocumentModel.countDocuments();
+  // Count documents by file_type
+  const fileTypes = [
+    'pdf',
+    'png',
+    'csv',
+    'doc',
+    'docx',
+    'image',
+    'other',
+    'jpeg',
+    'jpg',
+  ];
+  const fileTypeCounts = await DocumentModel.aggregate([
+    { $match: { file_type: { $in: fileTypes } } },
+    { $group: { _id: '$file_type', count: { $sum: 1 } } },
+  ]);
+
+  // Transform the result into an object for better readability
+  const documentsByFileType = fileTypeCounts.reduce(
+    (acc: Record<string, number>, curr) => {
+      acc[curr._id] = curr.count;
+      return acc;
+    },
+    {}
+  );
 
   const allRoles = await roleRepository.findAllRoleWithNamesOnly();
 
@@ -102,7 +129,14 @@ const getUserAnalytics = async () => {
     });
   }
 
-  return { all_users, role_wise_counts };
+  return {
+    all_users,
+    role_wise_counts,
+    documents: {
+      totalDocuments,
+      documentsByFileType,
+    },
+  };
 };
 
 const userRepository = {
