@@ -1,9 +1,37 @@
-import { Request, Response } from 'express';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import documentService from '../services/documentService';
+import CustomError from '../utils/CustomError';
+import { User } from '../models/userModel';
+
+export const hasDocumentAccess = async (req: Request, documentId: string) => {
+  const userFromRequest = req.user as { id: string };
+  const user: any = await User.findById(userFromRequest.id).populate('roles');
+  if (!user) {
+    throw new CustomError('User not found', 404);
+  }
+
+  const allowedRoles = ['system-admin'];
+  const hasAccess = user.roles.some((role: any) =>
+    allowedRoles.includes(role.name)
+  );
+
+  const document = await documentService.findById(documentId);
+  if (!document) {
+    throw new CustomError('Document not found', 404);
+  }
+
+  const isUploadedByUser =
+    user._id.toString() === document.uploaded_by.toString();
+
+  return isUploadedByUser || hasAccess;
+};
 
 const create = catchAsync(async (req: Request, res: Response) => {
-  const payload = { ...req.body };
+  // const user = req.body
+  const user: any = req.user;
+  const payload = { ...req.body, uploaded_by: user?._id };
 
   const result = await documentService.create(payload);
 
@@ -24,17 +52,35 @@ const findAll = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const findById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  const result = await documentService.findById(id);
+const findMyDocuments = catchAsync(async (req: Request, res: Response) => {
+  const userFromRequest = req.user as { id: string };
+  const result = await documentService.findMyDocuments(userFromRequest.id);
 
   res.status(200).json({
     success: true,
-    message: 'Document fetched successfully',
+    message: 'Documents fetched successfully',
     data: result,
   });
 });
+
+
+const findById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    const hasAccess = await hasDocumentAccess(req, id);
+    if (!hasAccess) {
+      return next(new CustomError('Denied: Permission error', 403));
+    }
+    const result = await documentService.findById(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Document fetched successfully',
+      data: result,
+    });
+  }
+);
 
 const findByParentId = catchAsync(async (req: Request, res: Response) => {
   const { parentId } = req.query; // Assuming parentId is passed as a query parameter
@@ -48,29 +94,42 @@ const findByParentId = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const payload = { ...req.body };
+const updateById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const payload = { ...req.body };
 
-  const result = await documentService.updateById(id, payload);
+    const hasAccess = await hasDocumentAccess(req, id);
+    if (!hasAccess) {
+      return next(new CustomError('Denied: Permission error', 403));
+    }
+    const result = await documentService.updateById(id, payload);
 
-  res.status(200).json({
-    success: true,
-    message: 'Document updated successfully',
-    data: result,
-  });
-});
+    res.status(200).json({
+      success: true,
+      message: 'Document updated successfully',
+      data: result,
+    });
+  }
+);
 
-const deleteById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+const deleteById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
 
-  await documentService.deleteById(id);
+    const hasAccess = await hasDocumentAccess(req, id);
+    if (!hasAccess) {
+      return next(new CustomError('Denied: Permission error', 403));
+    }
 
-  res.status(200).json({
-    success: true,
-    message: 'Document deleted successfully',
-  });
-});
+    await documentService.deleteById(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Document deleted successfully',
+    });
+  }
+);
 
 const addVersion = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -119,4 +178,5 @@ export default {
   addVersion,
   removeVersion,
   setCurrentVersion,
+  findMyDocuments
 };

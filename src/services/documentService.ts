@@ -50,7 +50,7 @@ const deleteById = async (documentId: string) => {
 // Service to add a version to a document
 const addVersion = async (
   documentId: string,
-  version: IDocument['versions'][0]
+  version: IDocument['versions'] | undefined
 ) => {
   const updatedDocument = await documentRepository.addVersion(
     documentId,
@@ -86,6 +86,11 @@ const setCurrentVersion = async (documentId: string, versionId: string) => {
   return updatedDocument;
 };
 
+const findMyDocuments = async (userId: string) => {
+  return await documentRepository.findMyDocuments(userId);
+};
+
+
 const documentService = {
   create,
   findById,
@@ -96,6 +101,7 @@ const documentService = {
   addVersion,
   removeVersion,
   setCurrentVersion,
+  findMyDocuments
 };
 
 export default documentService;

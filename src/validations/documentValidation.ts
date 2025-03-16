@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+const objectIdRegex = /^[0-9a-fA-F]{24}$/;
 // Validation schema for document versions
 const versionSchema = Joi.object({
   filename: Joi.string().required().messages({
@@ -35,12 +36,27 @@ const createDocumentValidationSchema = Joi.object({
       'string.base': 'File Type must be a string',
       'any.only': 'Invalid File Type',
     }),
-  parent_id: Joi.string().optional().allow(null).messages({
-    'string.base': 'Parent ID must be a string',
+  url: Joi.string().required().messages({
+    'string.base': 'Url must be a string',
+    'any.required': 'Url is required',
   }),
-  category_id: Joi.string().required().messages({
-    'string.base': 'Category_id must be a valid ObjectId',
-    'any.required': 'Category is required',
+  status: Joi.string()
+    .valid('pending', 'approved', 'rejected', 'on-hold')
+    .optional()
+    .default('pending')
+    .messages({
+      'string.base': 'Status must be a string',
+      'any.only': 'Invalid status',
+    }),
+  parent_id: Joi.string().pattern(objectIdRegex).optional().messages({
+    'string.base': 'parent_id must be a string',
+    'string.pattern.base': 'parent_id must be a valid MongoDB ObjectId',
+    'any.required': 'parent_id is required',
+  }),
+  category: Joi.string().pattern(objectIdRegex).optional().messages({
+    'string.base': 'category must be a string',
+    'string.pattern.base': 'category must be a valid MongoDB ObjectId',
+    'any.required': 'category is required',
   }),
   is_folder: Joi.boolean().default(false).optional().messages({
     'boolean.base': 'Is Folder must be a boolean',
@@ -72,6 +88,11 @@ const createDocumentValidationSchema = Joi.object({
 
 // Validation schema for updating a document
 const updateDocumentValidationSchema = Joi.object({
+  id: Joi.string().pattern(objectIdRegex).required().messages({
+    'string.base': 'id must be a string',
+    'string.pattern.base': 'id must be a valid MongoDB ObjectId',
+    'any.required': 'id is required',
+  }),
   filename: Joi.string().optional().messages({
     'string.base': 'Filename must be a string',
   }),
@@ -82,11 +103,25 @@ const updateDocumentValidationSchema = Joi.object({
       'string.base': 'File Type must be a string',
       'any.only': 'Invalid File Type',
     }),
-  parent_id: Joi.string().optional().allow(null).messages({
-    'string.base': 'Parent ID must be a string',
+  status: Joi.string()
+    .valid('pending', 'approved', 'rejected', 'on-hold')
+    .optional()
+    .messages({
+      'string.base': 'Status must be a string',
+      'any.only': 'Invalid status',
+    }),
+  url: Joi.optional().optional().messages({
+    'string.base': 'Url must be a string',
   }),
-  category: Joi.string().optional().messages({
-    'string.base': 'Category must be a valid ObjectId',
+  parent_id: Joi.string().pattern(objectIdRegex).optional().messages({
+    'string.base': 'parent_id must be a string',
+    'string.pattern.base': 'parent_id must be a valid MongoDB ObjectId',
+    'any.required': 'parent_id is required',
+  }),
+  category: Joi.string().pattern(objectIdRegex).optional().messages({
+    'string.base': 'category must be a string',
+    'string.pattern.base': 'category must be a valid MongoDB ObjectId',
+    'any.required': 'category is required',
   }),
   is_folder: Joi.boolean().optional().messages({
     'boolean.base': 'Is Folder must be a boolean',

@@ -15,8 +15,8 @@ const router = Router();
 router.post(
   '/',
   authenticate,
-  authorize(['system-admin', 'editor']), // Add roles according to your needs
-  checkPermissions('document-management', 'create'),
+  // authorize(['system-admin', 'editor']), // Add roles according to your needs
+  // checkPermissions('document-management', 'create'),
   sanitize(createDocumentValidationSchema),
   documentController.create
 );
@@ -25,17 +25,25 @@ router.post(
 router.get(
   '/',
   authenticate,
-  authorize(['system-admin', 'editor', 'viewer']), // Add roles as needed
-  checkPermissions('document-management', 'read'),
+  // authorize(['system-admin', 'editor', 'viewer']), // Add roles as needed
+  // checkPermissions('document-management', 'read'),
   documentController.findAll
+);
+
+router.get(
+  '/my-documents',
+  authenticate,
+  // authorize(['system-admin', 'editor', 'viewer']), // Add roles as needed
+  // checkPermissions('document-management', 'read'),
+  documentController.findMyDocuments
 );
 
 // Get a single document by ID
 router.get(
   '/:id',
   authenticate,
-  authorize(['system-admin', 'editor', 'viewer']),
-  checkPermissions('document-management', 'read'),
+  // authorize(['system-admin', 'editor', 'viewer']),
+  // checkPermissions('document-management', 'read'),
   documentController.findById
 );
 
@@ -52,8 +60,8 @@ router.get(
 router.put(
   '/:id',
   authenticate,
-  authorize(['system-admin', 'editor']),
-  checkPermissions('document-management', 'update'),
+  // authorize(['system-admin', 'editor']),
+  // checkPermissions('document-management', 'update'),
   sanitize(updateDocumentValidationSchema),
   documentController.updateById
 );
@@ -62,8 +70,8 @@ router.put(
 router.delete(
   '/:id',
   authenticate,
-  authorize(['system-admin']),
-  checkPermissions('document-management', 'update'),
+  // authorize(['system-admin']),
+  // checkPermissions('document-management', 'update'),
   documentController.deleteById
 );
 

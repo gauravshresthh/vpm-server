@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from 'mongoose';
 import { IDocument, DocumentModel } from '../models/documentModel';
 
@@ -11,12 +12,26 @@ const createDocument = async (payload: IDocument) => {
 const findDocumentById = async (
   documentId: mongoose.Types.ObjectId | string
 ) => {
-  return await DocumentModel.findById(documentId).populate('category');
+  const query = DocumentModel.findById(documentId);
+  const document: any = await query.exec();
+
+  if (document && document.category) {
+    await document.populate('category');
+  }
+
+  return document;
 };
 
 // Find all documents
 const findAllDocuments = async () => {
-  return await DocumentModel.find().populate('category');
+  const documents = await DocumentModel.find();
+  // Populate only the documents that have a non-null category
+  await DocumentModel.populate(documents, { path: 'category', match: { $ne: null } });
+  return documents;
+};
+
+const findMyDocuments = async (userId: string) => {
+  return await DocumentModel.find({ uploaded_by: userId });
 };
 
 // Find all documents by parent ID (e.g., files within a folder)
@@ -44,7 +59,7 @@ const deleteDocument = async (documentId: string) => {
 // Add a new version to a document
 const addVersion = async (
   documentId: string,
-  version: IDocument['versions'][0]
+  version: IDocument['versions'] | undefined
 ) => {
   return await DocumentModel.findByIdAndUpdate(
     documentId,
@@ -87,6 +102,7 @@ const documentRepository = {
   addVersion,
   removeVersion,
   setCurrentVersion,
+  findMyDocuments
 };
 
 export default documentRepository;

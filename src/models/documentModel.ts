@@ -1,6 +1,4 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-import { IDocumentCategory } from './documentCategoryModel';
-
 export interface IVersion {
   filename: string;
   uploaded_by: string;
@@ -16,14 +14,17 @@ export interface IDocument extends Document {
   filename: string;
   file_type: string;
   parent_id?: mongoose.Types.ObjectId | null;
-  category_id: mongoose.Types.ObjectId | IDocumentCategory;
+  category_id?: mongoose.Types.ObjectId | null;
+  uploaded_by?: mongoose.Types.ObjectId;
   is_folder: boolean;
   size?: number;
-  versions: IVersion[];
-  starred: boolean;
-  recent: boolean;
+  versions?: IVersion[];
+  starred?: boolean;
+  recent?: boolean;
   visibility: 'public' | 'private';
   is_archived: boolean;
+  url: string;
+  status: string;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -67,15 +68,29 @@ const document_schema: Schema<IDocument> = new Schema<IDocument>(
       enum: ['pdf', 'csv', 'doc', 'docx', 'image', 'other'],
       default: null,
     },
+    url: {
+      type: String,
+      default: '',
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected', 'on-hold'],
+      default: null,
+    },
     parent_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Document',
       default: null,
     },
+    uploaded_by: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     category_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'DocumentCategory',
-      required: true,
+      default: null,
     },
     is_folder: {
       type: Boolean,
