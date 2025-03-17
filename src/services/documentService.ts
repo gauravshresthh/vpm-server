@@ -1,6 +1,9 @@
 import documentRepository from '../dbAccess/documentRepository';
+import userRepository from '../dbAccess/userRepository';
+import { ChangeDocumentStatusEmailTemplate } from '../emails/MessageAndReplyEmailTemplate';
 import { IDocument } from '../models/documentModel';
 import CustomError from '../utils/CustomError';
+import emailService from './emailService';
 
 // Service to create a new document
 const create = async (payload: IDocument) => {
@@ -21,8 +24,32 @@ const findById = async (documentId: string) => {
 };
 
 // Service to get all documents
-const findAll = async (page: number, limit: number, search: string) => {
-  return await documentRepository.findAllDocuments(page, limit, search);
+const findAll = async (
+  page: number,
+  limit: number,
+  search: string,
+  category_id?: string
+) => {
+  return await documentRepository.findAllDocuments(
+    page,
+    limit,
+    search,
+    category_id
+  );
+};
+
+const findAllDocumentsByUserSpecific = async (
+  page: number,
+  limit: number,
+  search: string,
+  category_id?: string
+) => {
+  return await documentRepository.findAllDocumentsByUserSpecific(
+    page,
+    limit,
+    search,
+    category_id
+  );
 };
 
 // Service to get documents by parent ID (for folder contents)
@@ -32,13 +59,50 @@ const findByParentId = async (parentId: string | null) => {
 
 // Service to update a document by ID
 const updateById = async (documentId: string, payload: Partial<IDocument>) => {
+  const document = await documentRepository.findDocumentById(documentId);
+  if (!document) {
+    throw new CustomError('Document not found', 400);
+  }
   const updatedDocument = await documentRepository.updateDocument(
     documentId,
     payload
   );
-  if (!updatedDocument) {
+
+  return updatedDocument;
+};
+
+const changeDocumentStatus = async (
+  documentId: string,
+  payload: Partial<IDocument>
+) => {
+  const status = payload.status;
+  const document = await documentRepository.findDocumentById(documentId);
+  if (!document) {
     throw new CustomError('Document not found', 400);
   }
+  const updatedDocument = await documentRepository.updateDocument(
+    documentId,
+    payload
+  );
+  const userId = document.uploaded_by;
+  const user = await userRepository.findById(userId);
+  if (user) {
+    const email = user.email;
+    const inviteLink = `${process.env.FRONTEND_URL}/student/dashboard/placement/my-placement`;
+
+    const emailPayload = {
+      email,
+      subject: `You document has been ${status} !`,
+      message: 'Your document has some updates.',
+      htmlContent: ChangeDocumentStatusEmailTemplate(
+        `You document has been ${status}`,
+        inviteLink
+      ),
+    };
+
+    await emailService.sendEmail(emailPayload);
+  }
+
   return updatedDocument;
 };
 
@@ -106,6 +170,8 @@ const documentService = {
   setCurrentVersion,
   findMyDocuments,
   createMany,
+  changeDocumentStatus,
+  findAllDocumentsByUserSpecific,
 };
 
 export default documentService;

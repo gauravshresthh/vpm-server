@@ -70,7 +70,14 @@ const findAll = catchAsync(async (req: Request, res: Response) => {
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
   const search = typeof req.query.search === 'string' ? req.query.search : '';
-  const result = await documentService.findAll(page, limit, search);
+  const category_id =
+    typeof req.query.category_id === 'string' ? req.query.category_id : '';
+  const result = await documentService.findAll(
+    page,
+    limit,
+    search,
+    category_id
+  );
 
   res.status(200).json({
     success: true,
@@ -130,6 +137,24 @@ const updateById = catchAsync(
       return next(new CustomError('Denied: Permission error', 403));
     }
     const result = await documentService.updateById(id, payload);
+
+    res.status(200).json({
+      success: true,
+      message: 'Document updated successfully',
+      data: result,
+    });
+  }
+);
+
+const changeDocumentStatus = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.body;
+    const payload = { ...req.body };
+    const hasAccess = await hasDocumentAccess(req, id);
+    if (!hasAccess) {
+      return next(new CustomError('Denied: Permission error', 403));
+    }
+    const result = await documentService.changeDocumentStatus(id, payload);
 
     res.status(200).json({
       success: true,
@@ -206,4 +231,5 @@ export default {
   setCurrentVersion,
   findMyDocuments,
   createMany,
+  changeDocumentStatus,
 };

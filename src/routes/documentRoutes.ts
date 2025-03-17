@@ -5,6 +5,7 @@ import sanitize from '../middlewares/sanitize';
 import checkPermissions from '../middlewares/checkPermissions';
 import documentController from '../controllers/documentController';
 import {
+  changeDocumentStatusValidationSchema,
   createDocumentValidationSchema,
   createManyDocumentsValidationSchema,
   getAllDocumentsValidationSchema,
@@ -48,6 +49,15 @@ router.get(
   // authorize(['system-admin', 'editor', 'viewer']), // Add roles as needed
   // checkPermissions('document-management', 'read'),
   documentController.findMyDocuments
+);
+
+router.put(
+  '/change-status',
+  authenticate,
+  // authorize(['system-admin', 'editor']),
+  // checkPermissions('document-management', 'update'),
+  sanitize(changeDocumentStatusValidationSchema),
+  documentController.changeDocumentStatus
 );
 
 // Get a single document by ID

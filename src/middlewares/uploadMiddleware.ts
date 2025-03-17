@@ -6,8 +6,13 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/'); // Directory where files will be saved
   },
   filename: (req, file, cb) => {
+    // Split the original filename and its extension
+    const fileName = file.originalname.replace(/\.[^/.]+$/, ''); // Get the name without extension
+    const fileExtension = file.originalname.split('.').pop(); // Get the file extension
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, `${file.originalname}-${uniqueSuffix}`);
+
+    // Combine the file name, unique suffix, and extension
+    cb(null, `${fileName}-${uniqueSuffix}.${fileExtension}`);
   },
 });
 

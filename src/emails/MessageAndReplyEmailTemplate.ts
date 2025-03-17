@@ -36,3 +36,23 @@ export const MessageAndReplyEmailTemplate = (
 
   return EmailLayout('', bodyContent);
 };
+
+export const ChangeDocumentStatusEmailTemplate = (
+  message: string,
+  website_link: string
+) => {
+  const bodyContent = `
+      <br/>
+      <p>
+        ${message}
+      </p>
+      <a href="${website_link}">
+      <p style="display: inline-block; background-color: #249B99; color: #ffffff; text-decoration: none; 
+                padding: 5px 20px; border-radius: 5px; font-size: 16px; margin-top: 30px; margin-bottom: 30px;">
+        Check your documents status
+      </p>
+      </a>
+    `;
+
+  return EmailLayout('', bodyContent);
+};

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import mongoose from 'mongoose';
+import mongoose, { PipelineStage } from 'mongoose';
 import { IDocument, DocumentModel } from '../models/documentModel';
 
 // Create a new document
@@ -30,25 +30,70 @@ const findDocumentById = async (
 const findAllDocuments = async (
   page: number = 1,
   limit: number = 10,
-  search: string = ''
+  search: string = '',
+  category_id: string = ''
 ) => {
   const skip = (page - 1) * limit;
 
-  const searchFilter = search
-    ? {
-        $or: [
-          { filename: { $regex: search, $options: 'i' } },
-          { name: { $regex: search, $options: 'i' } },
-        ],
-      }
-    : {};
+  const searchFilter: any = {
+    ...(search && {
+      $or: [
+        { filename: { $regex: search, $options: 'i' } },
+        { name: { $regex: search, $options: 'i' } },
+      ],
+    }),
+    ...(category_id && { category_id }),
+  };
+
   const totalCount = await DocumentModel.countDocuments(searchFilter);
   const result = await DocumentModel.find(searchFilter)
     .skip(skip)
     .limit(limit)
-    .sort({ updated_at: -1 })
+    .sort({ created_at: -1 })
     .populate('category_id')
     .exec();
+
+  return {
+    totalCount,
+    totalPages: Math.ceil(totalCount / limit),
+    currentPage: page,
+    result,
+  };
+};
+
+const findAllDocumentsByUserSpecific = async (
+  page: number = 1,
+  limit: number = 10,
+  search: string = '',
+  category_id: string = ''
+) => {
+  const skip = (page - 1) * limit;
+
+  const matchFilter: Record<string, any> = {
+    ...(search && {
+      $or: [
+        { filename: { $regex: search, $options: 'i' } },
+        { name: { $regex: search, $options: 'i' } },
+      ],
+    }),
+    ...(category_id && { category_id }),
+  };
+
+  const pipeline: PipelineStage[] = [
+    { $match: matchFilter },
+    { $sort: { created_at: -1 } },
+    {
+      $group: {
+        _id: '$uploaded_by',
+        documents: { $push: '$$ROOT' },
+      },
+    },
+    { $skip: skip },
+    { $limit: limit },
+  ];
+
+  const result = await DocumentModel.aggregate(pipeline).exec();
+  const totalCount = await DocumentModel.countDocuments(matchFilter);
 
   return {
     totalCount,
@@ -132,6 +177,7 @@ const documentRepository = {
   setCurrentVersion,
   findMyDocuments,
   createManyDocuments,
+  findAllDocumentsByUserSpecific,
 };
 
 export default documentRepository;

@@ -45,7 +45,7 @@ const createDocumentValidationSchema = Joi.object({
     'any.required': 'Url is required',
   }),
   status: Joi.string()
-    .valid('pending', 'approved', 'rejected', 'on-hold')
+    .valid('pending', 'in-review', 're-submit', 'approved')
     .optional()
     .default('pending')
     .messages({
@@ -127,7 +127,7 @@ const updateDocumentValidationSchema = Joi.object({
       'any.only': 'Invalid File Type',
     }),
   status: Joi.string()
-    .valid('pending', 'approved', 'rejected', 'on-hold')
+    .valid('pending', 'in-review', 're-submit', 'approved')
     .optional()
     .messages({
       'string.base': 'Status must be a string',
@@ -170,10 +170,33 @@ const updateDocumentValidationSchema = Joi.object({
   }),
 }).options({ allowUnknown: false });
 
+const changeDocumentStatusValidationSchema = Joi.object({
+  id: Joi.string().pattern(objectIdRegex).required().messages({
+    'string.base': 'id must be a string',
+    'string.pattern.base': 'id must be a valid MongoDB ObjectId',
+    'any.required': 'id is required',
+  }),
+  status: Joi.string()
+    .valid('pending', 'in-review', 're-submit', 'approved')
+    .optional()
+    .messages({
+      'string.base': 'Status must be a string',
+      'any.only': 'Invalid status',
+    }),
+}).options({ allowUnknown: false });
+
 const getAllDocumentsValidationSchema = Joi.object({
   page: Joi.number().integer().min(1).default(1),
   limit: Joi.number().integer().min(1).max(100).default(10),
   search: Joi.string().trim().optional().default(''),
+  category_id: Joi.string()
+    .pattern(objectIdRegex)
+    .allow('')
+    .optional()
+    .messages({
+      'string.base': 'category_id must be a string',
+      'string.pattern.base': 'category_id must be a valid MongoDB ObjectId',
+    }),
 }).options({ allowUnknown: false });
 
 export {
@@ -181,4 +204,5 @@ export {
   updateDocumentValidationSchema,
   createManyDocumentsValidationSchema,
   getAllDocumentsValidationSchema,
+  changeDocumentStatusValidationSchema,
 };
