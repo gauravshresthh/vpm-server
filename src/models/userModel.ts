@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   roles: mongoose.Types.ObjectId[];
+  courses: mongoose.Types.ObjectId[];
   is_verified?: boolean;
   otp?: string;
   otp_expiry?: Date;
@@ -16,6 +17,7 @@ export interface IUser extends Document {
   login_at?: Date;
   photo?: string;
   phone_number?: string;
+  dob?: string;
   created_at?: Date;
   updated_at?: Date;
   comparePassword(password: string): Promise<boolean>;
@@ -25,10 +27,12 @@ const UserSchema: Schema<IUser> = new Schema(
   {
     name: { type: String, required: true, maxlength: 255 },
     email: { type: String, required: true, unique: true, maxlength: 255 },
-    password: { type: String, required: true, maxlength: 255 },
+    dob: { type: String },
+    password: { type: String, maxlength: 255 },
     roles: [
       { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
     ],
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
     is_verified: {
       type: Boolean,
       default: false,

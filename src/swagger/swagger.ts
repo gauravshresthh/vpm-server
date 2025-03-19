@@ -38,16 +38,12 @@ export const swaggerOptions: swaggerJSDoc.Options = {
     },
     servers: [
       {
-        url: 'http://localhost:8000',
-        description: 'Development server',
-      },
-      {
         url: 'https://api.queensford.com.au',
         description: 'Production server',
       },
       {
-        url: 'http://20.92.145.247:8000',
-        description: 'Production server url with port',
+        url: 'http://localhost:8000',
+        description: 'Development server',
       },
     ],
     components: {

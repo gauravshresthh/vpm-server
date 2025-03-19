@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from 'mongoose';
 import { User } from '../models/userModel';
 import { UserType, UpdateUserType } from '../types/userTypes';
@@ -6,6 +7,11 @@ import { DocumentModel } from '../models/documentModel';
 
 // Create a new user
 const createUser = async (payload: UserType) => {
+  const user = new User(payload);
+  return await user.save();
+};
+
+const createUserFromIntegration = async (payload: any) => {
   const user = new User(payload);
   return await user.save();
 };
@@ -150,6 +156,7 @@ const userRepository = {
   updateById,
   deleteMultipleByIds,
   getUserAnalytics,
+  createUserFromIntegration,
 };
 
 export default userRepository;

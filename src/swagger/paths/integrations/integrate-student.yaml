@@ -1,0 +1,147 @@
+vpms: 3.0.0
+info:
+  title: Student Integration API
+  description: API for integrating student data, including their courses, into the system.
+  version: 1.0.0
+paths:
+  /api/v1/integrations/students:
+    post:
+      summary: Integrate a student and their courses
+      description: This API integrates a student with their courses into the system. If the student already exists, it updates the courses.
+      operationId: integrateStudent
+      tags:
+        - Student Integration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: The first name of the student.
+                  example: "John"
+                last_name:
+                  type: string
+                  description: The last name of the student.
+                  example: "Doe"
+                email:
+                  type: string
+                  format: email
+                  description: The email address of the student.
+                  example: "test01@example.com"
+                dob:
+                  type: string
+                  format: date
+                  description: The date of birth of the student.
+                  example: "2000-05-15"
+                courses:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      course_name:
+                        type: string
+                        description: The name of the course.
+                        example: "Computer Science"
+                      course_code:
+                        type: string
+                        description: The unique course code.
+                        example: "CS101"
+                  description: List of courses the student is enrolled in.
+                  minItems: 1
+              required:
+                - first_name
+                - last_name
+                - email
+                - dob
+                - courses
+      responses:
+        200:
+          description: Student integration success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Student integration success."
+                  data:
+                    type: object
+                    properties:
+                      student:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "John Doe"
+                          email:
+                            type: string
+                            example: "test01@example.com"
+                          dob:
+                            type: string
+                            example: "2000-05-15"
+                          courses:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                course_name:
+                                  type: string
+                                  example: "Computer Science"
+                                course_code:
+                                  type: string
+                                  example: "CS101"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No role is created with that name."
+        401:
+          description: Unauthorized access (missing or invalid API key)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Unauthorized access. Invalid or missing API key."
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Error creating courses: <error_message>"
+    security:
+      - apiKey: []
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: The API key required for accessing the integration API.
