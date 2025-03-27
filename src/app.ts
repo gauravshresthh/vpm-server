@@ -94,7 +94,7 @@ app.use(bodyParser.json());
 app.get('/', (req: Request, res: Response) => {
   res.json({
     success: true,
-    message: 'Hello! Welcome to Vocational Placement Management API !!!',
+    message: 'Hello! Welcome to Vocational Placement Management API !',
   });
 });
 
