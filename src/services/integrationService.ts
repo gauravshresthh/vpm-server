@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import courseRepository from '../dbAccess/courseRepository';
 import roleRepository from '../dbAccess/roleRepository';
+import { StudentIntegrationEmailTemplate } from '../emails/StudentIntegrationEmailTemplate';
 import { User } from '../models/userModel';
 import CustomError from '../utils/CustomError';
+import emailService from './emailService';
 
 interface Course {
   course_name: string;
@@ -24,6 +26,14 @@ const integrateStudent = async (payload: StudentData) => {
 
   // Create or Find the User
   let user = await User.findOne({ email });
+
+  if(user){
+    throw new CustomError(
+      `You account has already been created.`,
+      400
+    );
+  }
+  
   if (!user) {
     const newUser = new User({
       name: `${first_name} ${last_name}`,
@@ -40,6 +50,15 @@ const integrateStudent = async (payload: StudentData) => {
   // Link the Courses to the User
   user.courses = courseIds;
   await user.save();
+
+  const inviteLink = `${process.env.FRONTEND_URL}/auth/sign-in`;
+  const emailPayload = {
+    email,
+    subject: 'Congratulations, you account has been successfully created',
+    message: 'Congratulations, you account has been successfully created',
+    htmlContent: StudentIntegrationEmailTemplate(inviteLink),
+  };
+  await emailService.sendEmail(emailPayload);
 
   return {
     student: user,
