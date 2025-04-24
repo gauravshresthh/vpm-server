@@ -27,13 +27,10 @@ const integrateStudent = async (payload: StudentData) => {
   // Create or Find the User
   let user = await User.findOne({ email });
 
-  if(user){
-    throw new CustomError(
-      `You account has already been created.`,
-      400
-    );
+  if (user) {
+    throw new CustomError(`You account has already been created.`, 400);
   }
-  
+
   if (!user) {
     const newUser = new User({
       name: `${first_name} ${last_name}`,
