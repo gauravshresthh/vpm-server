@@ -148,6 +148,14 @@ const updateProviderValidationSchema = Joi.object({
   campuses: Joi.array().items(campusSchema).optional().messages({
     'array.base': 'Campuses must be an array of campus objects',
   }),
+  assigned_to: Joi.string()
+    .pattern(objectIdRegex)
+    .allow(null)
+    .optional()
+    .messages({
+      'string.base': 'Assigned To must be a string',
+      'string.pattern.base': 'Assigned To must be a valid MongoDB ObjectId',
+    }),
   created_at: Joi.string().optional(),
   updated_at: Joi.string().optional(),
 }).options({ allowUnknown: false });

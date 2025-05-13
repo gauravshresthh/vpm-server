@@ -42,6 +42,11 @@ const ProviderSchema: Schema<IProvider> = new Schema(
       fax: { type: String },
     },
     campuses: [CampusSchema],
+    assigned_to: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
@@ -92,6 +97,7 @@ export interface IProvider extends Document {
     fax?: string;
   };
   campuses: ICampus[];
+  assigned_to?: mongoose.Types.ObjectId;
   created_at?: Date;
   updated_at?: Date;
 }
