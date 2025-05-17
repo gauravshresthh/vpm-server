@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+const objectIdRegex = /^[0-9a-fA-F]{24}$/;
 const createUserValidationSchema = Joi.object({
   name: Joi.string().required().messages({
     'string.base': 'Name must be a string',
@@ -33,4 +34,47 @@ const createUserValidationSchema = Joi.object({
     }),
 }).options({ allowUnknown: false });
 
-export { createUserValidationSchema };
+const resetPasswordValidationSchema = Joi.object({
+  user_id: Joi.string().required().messages({
+    'string.base': 'User ID must be a string',
+    'any.required': 'User ID is required',
+  }),
+  new_password: Joi.string()
+    .trim()
+    .min(8)
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).+$/)
+    .required()
+    .messages({
+      'string.base': 'New password must be a string',
+      'string.min': 'New password must be at least 8 characters long',
+      'string.pattern.base':
+        'New password must include at least one uppercase letter, one lowercase letter, one number, and one special character',
+      'any.required': 'New password is required',
+    }),
+  notify_with_email: Joi.boolean().optional().messages({
+    'boolean.base': 'Notify with email must be a boolean',
+  }),
+}).options({ allowUnknown: false });
+
+const editUserByIdValidationSchema = Joi.object({
+  user_id: Joi.string().required().pattern(objectIdRegex).messages({
+    'string.base': 'User ID must be a string',
+    'any.required': 'User ID is required',
+    'string.pattern.base': 'User ID must be a valid MongoDB ObjectId',
+  }),
+  name: Joi.string().optional().messages({
+    'string.base': 'Name must be a string',
+  }),
+  active: Joi.boolean().optional().messages({
+    'boolean.base': 'Active must be a boolean',
+  }),
+  phone: Joi.string().optional().messages({
+    'string.base': 'Phone must be a string',
+  }),
+}).options({ allowUnknown: false });
+
+export {
+  createUserValidationSchema,
+  resetPasswordValidationSchema,
+  editUserByIdValidationSchema,
+};
