@@ -7,16 +7,17 @@ import { User } from '../models/userModel';
 
 export const hasDocumentAccess = async (req: Request, documentId: string) => {
   const userFromRequest = req.user as { id: string };
-  const user: any = await User.findById(userFromRequest.id).populate('roles');
+  const user: any = await User.findById(userFromRequest.id).populate('role');
   if (!user) {
     throw new CustomError('User not found', 404);
   }
 
   const allowedRoles = ['system-admin'];
-  const hasAccess = user.roles.some((role: any) =>
-    allowedRoles.includes(role.name)
-  );
-
+  const userRole = (user.role as any)?.name;
+  const hasAccess = allowedRoles.includes(userRole);
+  if (!hasAccess) {
+    throw new CustomError('Forbidden: You do not have access', 403);
+  }
   const document = await documentService.findById(documentId);
   if (!document) {
     throw new CustomError('Document not found', 404);

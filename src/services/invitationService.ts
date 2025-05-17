@@ -75,7 +75,7 @@ const acceptInvitation = async (payload: {
     name,
     email: invitation.email,
     password: password,
-    roles: [invitation.role],
+    role: invitation.role,
     is_verified: true,
   };
   const result = await userRepository.createUser(userPayload);

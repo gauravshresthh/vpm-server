@@ -71,19 +71,13 @@ const login = catchAsync(
       return next(new CustomError('Invalid credentials', 401));
     }
 
-    const token = generateAccessToken(user._id, user.roles);
+    const token = generateAccessToken(user._id, user.role);
 
-    const roles = [];
-
-    for (const roleId of user.roles) {
-      const role = await roleService.findOnlyRoleNameById(roleId);
-      roles.push(role.name);
-    }
-
+    const role = await roleService.findOnlyRoleNameById(user.role);
     const result = {
       id: user._id,
       email: user.email,
-      roles,
+      role,
       name: user.name,
     };
 

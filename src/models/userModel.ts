@@ -5,7 +5,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  roles: mongoose.Types.ObjectId[];
+  role: mongoose.Types.ObjectId;
   courses: mongoose.Types.ObjectId[];
   is_verified?: boolean;
   otp?: string;
@@ -29,9 +29,7 @@ const UserSchema: Schema<IUser> = new Schema(
     email: { type: String, required: true, unique: true, maxlength: 255 },
     dob: { type: String },
     password: { type: String, maxlength: 255 },
-    roles: [
-      { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
-    ],
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
     courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
     is_verified: {
       type: Boolean,
@@ -114,6 +112,6 @@ UserSchema.methods.comparePassword = function (
   return bcrypt.compare(password, this.password);
 };
 
-UserSchema.index({ roles: 1, active: 1 });
+UserSchema.index({ role: 1, active: 1 });
 
 export const User = mongoose.model<IUser>('User', UserSchema);

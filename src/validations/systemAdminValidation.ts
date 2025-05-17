@@ -68,8 +68,29 @@ const editUserByIdValidationSchema = Joi.object({
   active: Joi.boolean().optional().messages({
     'boolean.base': 'Active must be a boolean',
   }),
-  phone: Joi.string().optional().messages({
-    'string.base': 'Phone must be a string',
+  phone_number: Joi.string().optional().allow("").messages({
+    'string.base': 'Phone Number must be a string',
+  }),
+}).options({ allowUnknown: false });
+
+const editUserRoleByIdValidationSchema = Joi.object({
+  user_id: Joi.string().required().pattern(objectIdRegex).messages({
+    'string.base': 'User ID must be a string',
+    'any.required': 'User ID is required',
+    'string.pattern.base': 'User ID must be a valid MongoDB ObjectId',
+  }),
+  role_id: Joi.string().required().pattern(objectIdRegex).messages({
+    'string.base': 'Role ID must be a string',
+    'any.required': 'Role ID is required',
+    'string.pattern.base': 'Role ID must be a valid MongoDB ObjectId',
+  }),
+}).options({ allowUnknown: false });
+
+const deleteUserByIdValidationSchema = Joi.object({
+  user_id: Joi.string().required().pattern(objectIdRegex).messages({
+    'string.base': 'User ID must be a string',
+    'any.required': 'User ID is required',
+    'string.pattern.base': 'User ID must be a valid MongoDB ObjectId',
   }),
 }).options({ allowUnknown: false });
 
@@ -77,4 +98,6 @@ export {
   createUserValidationSchema,
   resetPasswordValidationSchema,
   editUserByIdValidationSchema,
+  editUserRoleByIdValidationSchema,
+  deleteUserByIdValidationSchema
 };

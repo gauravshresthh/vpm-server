@@ -4,7 +4,7 @@ export interface UserType {
   name: string;
   email: string;
   password: string;
-  roles: mongoose.Types.ObjectId[];
+  role: mongoose.Types.ObjectId;
   is_verified?: boolean;
   otp?: string;
   otp_expiry?: Date;
@@ -15,7 +15,7 @@ export interface UserType {
 export interface UpdateUserType {
   name?: string;
   email?: string;
-  roles?: mongoose.Types.ObjectId[];
+  role?: mongoose.Types.ObjectId;
   photo?: string;
   phone_number?: string;
   active?: boolean;

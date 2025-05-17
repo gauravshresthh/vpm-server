@@ -8,9 +8,9 @@ import emailService from '../services/emailService';
 import { PasswordResetEmailTemplate } from '../emails/PasswordResetEmailTemplate';
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
-  const { email, name, password, roles } = req.body;
+  const { email, name, password, role } = req.body;
 
-  const payload = { email, name, password, roles };
+  const payload = { email, name, password, role };
 
   const result = await userService.create(payload);
 
@@ -76,7 +76,7 @@ const editUserById = catchAsync(
     const { user_id } = req.params;
     const updateData = req.body;
 
-    const allowedFields = ['name', 'phone', 'active'];
+    const allowedFields = ['name', 'phone_number', 'active'];
     const filteredData: Record<string, any> = {};
 
     for (const key of allowedFields) {
@@ -109,8 +109,54 @@ const editUserById = catchAsync(
   }
 );
 
+const editUserRoleById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { user_id } = req.params;
+    const { role_id } = req.body;
+
+    const payload = { role: role_id };
+    const updatedUser = await User.findByIdAndUpdate(user_id, payload, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) {
+      return next(new CustomError('User not found.', 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully',
+      data: updatedUser,
+    });
+  }
+);
+
+const deleteUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const userId = req.params.user_id;
+
+  // Check if userId is provided
+  if (!userId) {
+    return next(new CustomError('User ID is required.', 400));
+  }
+
+  // Find user by ID and delete
+  const user = await User.findByIdAndDelete(userId);
+
+  if (!user) {
+    return next(new CustomError('User not found.', 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: `User with ID ${userId} has been deleted successfully.`,
+  });
+});
+
 export default {
   createUser,
   resetUserPassword,
   editUserById,
+  editUserRoleById,
+  deleteUserById
 };

@@ -17,15 +17,14 @@ export const authorize = (allowedRoles: string[]) => {
       }
 
       // Fetch the user and their associated roles
-      const user = await User.findById(userFromRequest.id).populate('roles');
+      const user = await User.findById(userFromRequest.id).populate('role');
       if (!user) {
         return next(new CustomError('User not found', 404));
       }
+      
+      const userRole = (user.role as any)?.name;
+      const hasAccess = allowedRoles.includes(userRole);
 
-      // Ensure the user has at least one of the allowed roles
-      const hasAccess = user.roles.some((role: any) =>
-        allowedRoles.includes(role.name)
-      );
       if (!hasAccess) {
         return next(new CustomError('Forbidden: You do not have access', 403));
       }

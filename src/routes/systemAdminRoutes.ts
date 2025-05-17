@@ -5,7 +5,9 @@ import systemAdminController from '../controllers/systemAdminController';
 import sanitize from '../middlewares/sanitize';
 import {
   createUserValidationSchema,
+  deleteUserByIdValidationSchema,
   editUserByIdValidationSchema,
+  editUserRoleByIdValidationSchema,
   resetPasswordValidationSchema,
 } from '../validations/systemAdminValidation';
 import checkPermissions from '../middlewares/checkPermissions';
@@ -44,6 +46,22 @@ router.put(
   authorize(['system-admin']),
   sanitize(editUserByIdValidationSchema),
   systemAdminController.editUserById
+);
+
+router.put(
+  '/edit-role/:user_id',
+  authenticate,
+  authorize(['system-admin']),
+  sanitize(editUserRoleByIdValidationSchema),
+  systemAdminController.editUserRoleById
+);
+
+router.delete(
+  '/delete-user/:user_id',
+  authenticate,
+  authorize(['system-admin']),
+  sanitize(deleteUserByIdValidationSchema),
+  systemAdminController.deleteUserById
 );
 
 export default router;

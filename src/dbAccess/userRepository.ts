@@ -22,7 +22,7 @@ const findUserByEmail = async (email: string) => {
 };
 
 const findUserByEmailWithPassword = async (email: string) => {
-  return await User.findOne({ email }).select('+password');
+  return await User.findOne({ email }).select('+password +active');
 };
 
 // Find all users with pagination
@@ -46,7 +46,7 @@ const findAllUsers = async (
   const result = await User.find(searchFilter)
     .skip(skip)
     .limit(limit)
-    .populate('roles', 'name')
+    .populate('role', 'name')
     .exec();
 
   return {

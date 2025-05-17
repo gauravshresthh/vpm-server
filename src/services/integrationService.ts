@@ -36,7 +36,7 @@ const integrateStudent = async (payload: StudentData) => {
       name: `${first_name} ${last_name}`,
       email,
       dob,
-      roles: [role.id],
+      role: role.id,
     });
     user = await newUser.save();
   }

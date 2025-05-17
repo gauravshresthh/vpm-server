@@ -22,7 +22,7 @@ const create = async (payload: UserType) => {
     email,
     name,
     password,
-    roles: [role?.id],
+    role: role?.id,
     otp,
     otp_expiry: otpExpiry,
   };
