@@ -53,7 +53,7 @@ const resetUserPassword = catchAsync(
       const payload = {
         email,
         password: new_password,
-      }
+      };
       const emailPayload = {
         email,
         subject: 'Your password has been reset on VPMS',
@@ -63,7 +63,7 @@ const resetUserPassword = catchAsync(
 
       await emailService.sendEmail(emailPayload);
     }
-    
+
     res.status(200).json({
       success: true,
       message: `Password for user ${user_id} has been reset successfully.`,
@@ -71,43 +71,46 @@ const resetUserPassword = catchAsync(
   }
 );
 
-const editUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { user_id } = req.params;
-  const updateData = req.body;
+const editUserById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { user_id } = req.params;
+    const updateData = req.body;
 
-  const allowedFields = ['name', 'phone', 'active']; 
-  const filteredData: Record<string, any> = {};
+    const allowedFields = ['name', 'phone', 'active'];
+    const filteredData: Record<string, any> = {};
 
-  for (const key of allowedFields) {
-    if (updateData[key] !== undefined) {
-      filteredData[key] = typeof updateData[key] === 'string'
-        ? updateData[key].trim()
-        : updateData[key];
+    for (const key of allowedFields) {
+      if (updateData[key] !== undefined) {
+        filteredData[key] =
+          typeof updateData[key] === 'string'
+            ? updateData[key].trim()
+            : updateData[key];
+      }
     }
+
+    if (Object.keys(filteredData).length === 0) {
+      return next(new CustomError('No valid fields provided for update.', 400));
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(user_id, filteredData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) {
+      return next(new CustomError('User not found.', 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully',
+      data: updatedUser,
+    });
   }
-
-  if (Object.keys(filteredData).length === 0) {
-    return next(new CustomError('No valid fields provided for update.', 400));
-  }
-
-  const updatedUser = await User.findByIdAndUpdate(user_id, filteredData, {
-    new: true,
-    runValidators: true,
-  });
-
-  if (!updatedUser) {
-    return next(new CustomError('User not found.', 404));
-  }
-
-  res.status(200).json({
-    success: true,
-    message: 'User updated successfully',
-    data: updatedUser,
-  });
-});
+);
 
 export default {
   createUser,
   resetUserPassword,
-  editUserById
+  editUserById,
 };
