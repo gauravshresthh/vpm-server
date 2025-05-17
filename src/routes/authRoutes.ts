@@ -2,6 +2,7 @@ import { Router } from 'express';
 import authController from '../controllers/authController';
 import sanitize from '../middlewares/sanitize';
 import {
+  changeMyPasswordValidationSchema,
   resendOtpValidationSchema,
   updateMeValidationSchema,
   userLoginValidationSchema,
@@ -48,6 +49,13 @@ router.put(
   sanitize(updateMeValidationSchema),
   authenticate,
   authController.updateMe
+);
+
+router.put(
+  '/change-my-password',
+  sanitize(changeMyPasswordValidationSchema),
+  authenticate,
+  authController.changeMyPassword
 );
 
 export default router;

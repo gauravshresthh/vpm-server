@@ -69,10 +69,30 @@ const updateMeValidationSchema = Joi.object({
   }),
 }).options({ allowUnknown: false });
 
+const changeMyPasswordValidationSchema = Joi.object({
+  old_password: Joi.string().trim().required().messages({
+    'string.base': 'Old password must be a string',
+    'any.required': 'Old password is required',
+  }),
+  new_password: Joi.string()
+    .trim()
+    .min(8)
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).+$/)
+    .required()
+    .messages({
+      'string.base': 'New password must be a string',
+      'string.min': 'New password must be at least 8 characters long',
+      'string.pattern.base':
+        'New password must include at least one uppercase letter, one lowercase letter, one number, and one special character',
+      'any.required': 'New password is required',
+    }),
+}).options({ allowUnknown: false });
+
 export {
   userLoginValidationSchema,
   userRegisterValidationSchema,
   verifyOtpValidationSchema,
   resendOtpValidationSchema,
   updateMeValidationSchema,
+  changeMyPasswordValidationSchema,
 };

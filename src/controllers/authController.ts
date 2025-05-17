@@ -233,6 +233,38 @@ const trackLoginDetails = async (
   );
 };
 
+const changeMyPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const userId = (req.user as any).id;
+  const { old_password, new_password } = req.body;
+
+  // 1. Check required fields
+  if (!old_password || !new_password) {
+    return next(new CustomError('Please provide all required password fields.', 400));
+  }
+
+  // 3. Get user including password
+  const user = await User.findById(userId).select('+password');
+  if (!user) {
+    return next(new CustomError('User not found.', 404));
+  }
+
+  // 4. Check current password
+  const isCorrect = await user.comparePassword(old_password);
+  if (!isCorrect) {
+    return next(new CustomError('Your current password is incorrect.', 401));
+  }
+
+  // 5. Set and save new password
+  user.password = new_password;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Password changed successfully.',
+  });
+});
+
+
 export default {
   register,
   login,
@@ -241,4 +273,5 @@ export default {
   getMe,
   getUser,
   updateMe,
+  changeMyPassword
 };
