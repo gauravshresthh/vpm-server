@@ -21,7 +21,7 @@ export const authorize = (allowedRoles: string[]) => {
       if (!user) {
         return next(new CustomError('User not found', 404));
       }
-      
+
       const userRole = (user.role as any)?.name;
       const hasAccess = allowedRoles.includes(userRole);
 

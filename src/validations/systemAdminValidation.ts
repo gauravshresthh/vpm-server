@@ -68,7 +68,7 @@ const editUserByIdValidationSchema = Joi.object({
   active: Joi.boolean().optional().messages({
     'boolean.base': 'Active must be a boolean',
   }),
-  phone_number: Joi.string().optional().allow("").messages({
+  phone_number: Joi.string().optional().allow('').messages({
     'string.base': 'Phone Number must be a string',
   }),
 }).options({ allowUnknown: false });
@@ -99,5 +99,5 @@ export {
   resetPasswordValidationSchema,
   editUserByIdValidationSchema,
   editUserRoleByIdValidationSchema,
-  deleteUserByIdValidationSchema
+  deleteUserByIdValidationSchema,
 };

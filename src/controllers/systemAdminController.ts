@@ -132,31 +132,33 @@ const editUserRoleById = catchAsync(
   }
 );
 
-const deleteUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const userId = req.params.user_id;
+const deleteUserById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.user_id;
 
-  // Check if userId is provided
-  if (!userId) {
-    return next(new CustomError('User ID is required.', 400));
+    // Check if userId is provided
+    if (!userId) {
+      return next(new CustomError('User ID is required.', 400));
+    }
+
+    // Find user by ID and delete
+    const user = await User.findByIdAndDelete(userId);
+
+    if (!user) {
+      return next(new CustomError('User not found.', 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `User with ID ${userId} has been deleted successfully.`,
+    });
   }
-
-  // Find user by ID and delete
-  const user = await User.findByIdAndDelete(userId);
-
-  if (!user) {
-    return next(new CustomError('User not found.', 404));
-  }
-
-  res.status(200).json({
-    success: true,
-    message: `User with ID ${userId} has been deleted successfully.`,
-  });
-});
+);
 
 export default {
   createUser,
   resetUserPassword,
   editUserById,
   editUserRoleById,
-  deleteUserById
+  deleteUserById,
 };
